@@ -9,9 +9,9 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-on-primary: var(--on-primary);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-inter);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -56,6 +56,8 @@
 :root {
   /* Common */
   --foreground: #434A54;
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-inter);
   --on-primary: #F5F7FA;
   --surface: #FFFFFF;
   --info: #3A76D8;

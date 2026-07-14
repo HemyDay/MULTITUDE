@@ -1,21 +1,30 @@
+"use client";
+
 import { ReactNode } from "react";
 import NavigationMenu from "./NavigationMenu";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface MainLayoutProps {
   children: ReactNode;
   theme?: string;
 }
 
-export default async function MainLayout({
+export default function MainLayout({
   children,
   theme = "theme-dark-blue",
 }: MainLayoutProps) {
+  const isMobile = useIsMobile();
+
   return (
     <div
-      className={`flex flex-row h-screen w-screen bg-background p-4 gap-4 ${theme}`}
+      className={cn(
+        `flex h-screen w-screen overflow-hidden bg-background p-4 gap-4 ${theme}`,
+        isMobile && "pb-21.25",
+      )}
     >
       <NavigationMenu />
-      <div className="h-full w-full ">{children}</div>
+      <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
     </div>
   );
 }
