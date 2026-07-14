@@ -27,6 +27,9 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-info: var(--info);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -49,13 +52,29 @@
 }
 
 :root {
+  /* Common */
+  --foreground: #434A54;
+  --on-primary: #F5F7FA;
+  --surface: oklch(1 0 0);
+  --info: #3A76D8;
+  --info-background: color-mix(in srgb, white 92%, var(--info) 8%);
+  --warning: #D6A500;
+  --warning-background: color-mix(in srgb, white 92%, var(--warning) 8%);
+  --success: #2F9E6B;
+  --success-background: color-mix(in srgb, white 92%, var(--success) 8%);
+  --destructive: #D6454F;
+  --destructive-background: color-mix(in srgb, white 92%, var(--destructive) 8%);
+  --grey: #CCD1D9;
+
+  /* Overwritten */
+  --primary: oklch(0.205 0 0);
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+
+  /* Unused */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -83,31 +102,51 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.theme-blue {
-  --primary: #3498DB;
+.theme-light-blue {
+  --primary: #4FC1E9;
+  --primary-muted: #3BAFDA;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
-.theme-orange {
-  --primary: #E67E22;
+.theme-dark-blue {
+  --primary: #5D9CEC;
+  --primary-dark: #4A89DC;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
-.theme-dark-green {
-  --primary: #1ABC9C;
+.theme-mint-green {
+  --primary: #48CFAD;
+  --primary-dark: #37BC9B;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-light-green {
-  --primary: #2ECC71;
+  --primary: #A0D468;
+  --primary-dark: #8CC152;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-purple {
-  --primary: #9B59B6;
+  --primary: #AC92EC;
+  --primary-dark: #967ADC;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
+}
+
+.theme-pink {
+  --primary: #EC87C0;
+  --primary-dark: #D770AD;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
+}
+
+.theme-orange {
+  --primary: #FC6E51;
+  --primary-dark: #E9573F;
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 
+
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
     @apply bg-background text-foreground;
   }
