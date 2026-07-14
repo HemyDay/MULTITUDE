@@ -7,6 +7,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-on-primary: var(--on-primary);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -55,7 +57,7 @@
   /* Common */
   --foreground: #434A54;
   --on-primary: #F5F7FA;
-  --surface: oklch(1 0 0);
+  --surface: #FFFFFF;
   --info: #3A76D8;
   --info-background: color-mix(in srgb, white 92%, var(--info) 8%);
   --warning: #D6A500;
@@ -68,7 +70,7 @@
 
   /* Overwritten */
   --primary: oklch(0.205 0 0);
-  --background: oklch(1 0 0);
+  --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 
   /* Unused */
   --card: oklch(1 0 0);
@@ -104,43 +106,57 @@
 
 .theme-light-blue {
   --primary: #4FC1E9;
-  --primary-muted: #3BAFDA;
+  --on-primary: #F5F7FA;
+  --primary-dark: #3BAFDA;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-dark-blue {
   --primary: #5D9CEC;
+  --on-primary: #F5F7FA;
   --primary-dark: #4A89DC;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-mint-green {
   --primary: #48CFAD;
+  --on-primary: #F5F7FA;
   --primary-dark: #37BC9B;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-light-green {
   --primary: #A0D468;
+  --on-primary: #F5F7FA;
   --primary-dark: #8CC152;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-purple {
   --primary: #AC92EC;
+  --on-primary: #F5F7FA;
   --primary-dark: #967ADC;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-pink {
   --primary: #EC87C0;
+  --on-primary: #F5F7FA;
   --primary-dark: #D770AD;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
 .theme-orange {
   --primary: #FC6E51;
+  --on-primary: #F5F7FA;
   --primary-dark: #E9573F;
+  --surface: #FFFFFF;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 }
 
