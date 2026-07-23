@@ -22,7 +22,6 @@ const navigationItems: { label: string; icon: LucideIcon; href: string }[] = [
   { label: "Formulaire", icon: FileText, href: "/multitude/complex-form" },
   { label: "Data Table", icon: Table2, href: "/multitude/data-table" },
   { label: "Carte", icon: Map, href: "/multitude/map" },
-  { label: "Design System", icon: AppWindow, href: "/multitude/design-system" },
 ];
 
 export default function NavigationMenu() {
