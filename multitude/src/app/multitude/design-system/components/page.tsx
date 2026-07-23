@@ -12,6 +12,10 @@ import { FieldSlider } from "@/components/form/composition/FieldSlider";
 import { FieldSwitch } from "@/components/form/composition/FieldSwitch";
 import { FieldTextarea } from "@/components/form/composition/FieldTextArea";
 import { FieldToggleGroup } from "@/components/form/composition/FieldToggleGroup";
+import { Button } from "@/components/buttons/composition/Button";
+import { ButtonGroup } from "@/components/buttons/composition/ButtonGroup";
+import { ButtonGroupSeparator } from "@/components/buttons/composition/ButtonGroupSeparator";
+import { ButtonGroupText } from "@/components/buttons/composition/ButtonGroupText";
 import { Badge } from "@/components/feedback/composition/Badge";
 import { Alert } from "@/components/feedback/composition/Alert";
 import { Card } from "@/components/display/composition/Card";
@@ -70,6 +74,104 @@ const toggleOptions = [
 
 const compositionComponents: ShowcaseItem[] = [
   {
+    name: "Button",
+    fields: [
+      { key: "children", label: "children", kind: "text" },
+      {
+        key: "variant",
+        label: "variant",
+        kind: "select",
+        options: [
+          { label: "default", value: "default" },
+          { label: "outline", value: "outline" },
+          { label: "secondary", value: "secondary" },
+          { label: "ghost", value: "ghost" },
+          { label: "destructive", value: "destructive" },
+          { label: "link", value: "link" },
+        ],
+      },
+      {
+        key: "size",
+        label: "size",
+        kind: "select",
+        options: [
+          { label: "default", value: "default" },
+          { label: "xs", value: "xs" },
+          { label: "sm", value: "sm" },
+          { label: "lg", value: "lg" },
+          { label: "icon", value: "icon" },
+          { label: "icon-xs", value: "icon-xs" },
+          { label: "icon-sm", value: "icon-sm" },
+          { label: "icon-lg", value: "icon-lg" },
+        ],
+      },
+    ],
+    initialValues: {
+      children: "Click me",
+      variant: "default",
+      size: "default",
+    },
+    renderPreview: (values) => (
+      <Button
+        variant={
+          String(values.variant) as
+            | "default"
+            | "outline"
+            | "secondary"
+            | "ghost"
+            | "destructive"
+            | "link"
+        }
+        size={
+          String(values.size) as
+            | "default"
+            | "xs"
+            | "sm"
+            | "lg"
+            | "icon"
+            | "icon-xs"
+            | "icon-sm"
+            | "icon-lg"
+        }
+      >
+        {String(values.children)}
+      </Button>
+    ),
+  },
+  {
+    name: "ButtonGroup",
+    fields: [
+      {
+        key: "orientation",
+        label: "orientation",
+        kind: "select",
+        options: [
+          { label: "horizontal", value: "horizontal" },
+          { label: "vertical", value: "vertical" },
+        ],
+      },
+      { key: "label", label: "label", kind: "text" },
+    ],
+    initialValues: {
+      orientation: "horizontal",
+      label: "Options",
+    },
+    renderPreview: (values) => (
+      <ButtonGroup
+        orientation={String(values.orientation) as "horizontal" | "vertical"}
+      >
+        <Button size="sm" variant="outline">
+          {String(values.label)}
+        </Button>
+        <Button size="sm" variant="secondary">
+          Save
+        </Button>
+        <ButtonGroupSeparator orientation="vertical" />
+        <ButtonGroupText>Shared</ButtonGroupText>
+      </ButtonGroup>
+    ),
+  },
+  {
     name: "Badge",
     fields: [
       { key: "children", label: "children", kind: "text" },
@@ -86,12 +188,10 @@ const compositionComponents: ShowcaseItem[] = [
           { label: "link", value: "link" },
         ],
       },
-      { key: "asChild", label: "asChild", kind: "boolean" },
     ],
     initialValues: {
       children: "Active",
       variant: "default",
-      asChild: false,
     },
     renderPreview: (values) => (
       <Badge
@@ -104,7 +204,6 @@ const compositionComponents: ShowcaseItem[] = [
             | "ghost"
             | "link"
         }
-        asChild={Boolean(values.asChild)}
       >
         <span>{String(values.children)}</span>
       </Badge>
