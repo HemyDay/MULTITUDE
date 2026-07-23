@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { LightSlider } from "@/components/light/Slider";
+import { LightSlider } from "../light/Slider";
 import { uxFormStyles } from "./styles";
 import { cn } from "@/lib/utils";
 

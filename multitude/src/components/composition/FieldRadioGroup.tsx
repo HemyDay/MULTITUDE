@@ -3,7 +3,9 @@ import * as React from "react";
 import { UiRadioGroup, RadioGroupItem } from "@/components/ux/RadioGroup";
 import { UiLabel } from "@/components/ux/Label";
 
-interface FieldRadioGroupProps extends React.ComponentProps<typeof UiRadioGroup> {
+interface FieldRadioGroupProps extends React.ComponentProps<
+  typeof UiRadioGroup
+> {
   label?: string;
   helperText?: string;
   options?: Array<{ label: string; value: string; disabled?: boolean }>;
@@ -50,7 +52,7 @@ function FieldRadioGroup({
                 </span>
               </label>
             ))}
-      </RadioGroup>
+      </UiRadioGroup>
       {helperText ? (
         <p className="text-sm text-muted-foreground">{helperText}</p>
       ) : null}

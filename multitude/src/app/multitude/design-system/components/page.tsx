@@ -2,22 +2,22 @@
 
 import { useState, type ReactNode } from "react";
 
-import { FieldCheckbox } from "@/components/form/composition/FieldCheckbox";
-import { FieldCombobox } from "@/components/form/composition/FieldCombobox";
-import { FieldInput } from "@/components/form/composition/FieldInput";
-import { FieldInputOTP } from "@/components/form/composition/FieldInputOTP";
-import { FieldRadioGroup } from "@/components/form/composition/FieldRadioGroup";
-import { FieldSelect } from "@/components/form/composition/FieldSelect";
-import { FieldSlider } from "@/components/form/composition/FieldSlider";
-import { FieldSwitch } from "@/components/form/composition/FieldSwitch";
-import { FieldTextarea } from "@/components/form/composition/FieldTextArea";
-import { FieldToggleGroup } from "@/components/form/composition/FieldToggleGroup";
-import { Button } from "@/components/buttons/composition/Button";
-import { ButtonGroup } from "@/components/buttons/composition/ButtonGroup";
-import { Badge } from "@/components/feedback/composition/Badge";
-import { Alert } from "@/components/feedback/composition/Alert";
-import { Card } from "@/components/display/composition/Card";
-import { Label } from "@/components/form/composition/Label";
+import { FieldCheckbox } from "@/components/composition/FieldCheckbox";
+import { FieldCombobox } from "@/components/composition/FieldCombobox";
+import { FieldInput } from "@/components/composition/FieldInput";
+import { FieldInputOTP } from "@/components/composition/FieldInputOTP";
+import { FieldRadioGroup } from "@/components/composition/FieldRadioGroup";
+import { FieldSelect } from "@/components/composition/FieldSelect";
+import { FieldSlider } from "@/components/composition/FieldSlider";
+import { FieldSwitch } from "@/components/composition/FieldSwitch";
+import { FieldTextarea } from "@/components/composition/FieldTextArea";
+import { FieldToggleGroup } from "@/components/composition/FieldToggleGroup";
+import { Button } from "@/components/composition/Button";
+import { ButtonGroup } from "@/components/composition/ButtonGroup";
+import { Badge } from "@/components/composition/Badge";
+import { Alert } from "@/components/composition/Alert";
+import { Card } from "@/components/composition/Card";
+import { Label } from "@/components/composition/Label";
 import MainLayout from "@/components/layout/MainLayout";
 import { Snail } from "lucide-react";
 
