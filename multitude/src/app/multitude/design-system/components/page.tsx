@@ -12,6 +12,7 @@ import { FieldSlider } from "@/components/form/composition/FieldSlider";
 import { FieldSwitch } from "@/components/form/composition/FieldSwitch";
 import { FieldTextarea } from "@/components/form/composition/FieldTextArea";
 import { FieldToggleGroup } from "@/components/form/composition/FieldToggleGroup";
+import { Badge } from "@/components/feedback/composition/Badge";
 import { Alert } from "@/components/feedback/composition/Alert";
 import { Card } from "@/components/display/composition/Card";
 import { Label } from "@/components/form/composition/Label";
@@ -68,6 +69,47 @@ const toggleOptions = [
 ];
 
 const compositionComponents: ShowcaseItem[] = [
+  {
+    name: "Badge",
+    fields: [
+      { key: "children", label: "children", kind: "text" },
+      {
+        key: "variant",
+        label: "variant",
+        kind: "select",
+        options: [
+          { label: "default", value: "default" },
+          { label: "secondary", value: "secondary" },
+          { label: "destructive", value: "destructive" },
+          { label: "outline", value: "outline" },
+          { label: "ghost", value: "ghost" },
+          { label: "link", value: "link" },
+        ],
+      },
+      { key: "asChild", label: "asChild", kind: "boolean" },
+    ],
+    initialValues: {
+      children: "Active",
+      variant: "default",
+      asChild: false,
+    },
+    renderPreview: (values) => (
+      <Badge
+        variant={
+          String(values.variant) as
+            | "default"
+            | "secondary"
+            | "destructive"
+            | "outline"
+            | "ghost"
+            | "link"
+        }
+        asChild={Boolean(values.asChild)}
+      >
+        <span>{String(values.children)}</span>
+      </Badge>
+    ),
+  },
   {
     name: "FieldCheckbox",
     fields: [
