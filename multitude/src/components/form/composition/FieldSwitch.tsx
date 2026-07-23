@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { Label as UiLabel } from "@/components/ui/label";
-import { Switch as UiSwitch } from "@/components/ui/switch";
+import { UiLabel } from "@/components/form/ux/Label";
+import { UiSwitch } from "@/components/form/ux/Switch";
 
 interface FieldSwitchProps extends React.ComponentProps<typeof UiSwitch> {
   label?: string;

@@ -14,6 +14,7 @@ function UiSwitch({
         uxFormStyles.controlFocus,
         uxFormStyles.controlDisabled,
         className,
+        "cursor-pointer disabled:cursor-default",
       )}
       {...props}
     />

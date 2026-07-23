@@ -11,7 +11,7 @@ function UiButtonGroupText({
     <ButtonGroupText
       className={cn(
         className,
-        "px-4 py-2 gap-4 rounded-[4px] w-fit h-fit border-none",
+        "px-4 py-2 gap-4 rounded-[4px] w-fit h-fit border-none select-none",
       )}
       {...props}
     />

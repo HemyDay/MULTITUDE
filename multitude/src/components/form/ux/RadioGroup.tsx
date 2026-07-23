@@ -30,7 +30,12 @@ function RadioGroupItem({
   className,
   ...props
 }: React.ComponentProps<typeof UiRadioGroupItem>) {
-  return <UiRadioGroupItem className={cn(className)} {...props} />;
+  return (
+    <UiRadioGroupItem
+      className={cn(className, "cursor-pointer disabled:cursor-default")}
+      {...props}
+    />
+  );
 }
 
 export { UiRadioGroup, RadioGroupItem };

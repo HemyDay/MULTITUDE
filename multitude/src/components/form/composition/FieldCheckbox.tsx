@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { Checkbox as UiCheckbox } from "@/components/ui/checkbox";
-import { Label as UiLabel } from "@/components/ui/label";
+import { UiCheckbox } from "@/components/form/ux/Checkbox";
+import { UiLabel } from "@/components/form/ux/Label";
 
 interface FieldCheckboxProps extends React.ComponentProps<typeof UiCheckbox> {
   label?: string;

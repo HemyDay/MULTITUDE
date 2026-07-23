@@ -15,6 +15,7 @@ function UiCheckbox({
         uxFormStyles.controlFocus,
         uxFormStyles.controlDisabled,
         className,
+        "cursor-pointer disabled:cursor-auto",
       )}
       {...props}
     />

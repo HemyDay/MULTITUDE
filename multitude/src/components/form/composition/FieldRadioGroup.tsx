@@ -22,6 +22,8 @@ function FieldRadioGroup({
   children,
   ...props
 }: FieldRadioGroupProps) {
+  const isGroupDisabled = Boolean(props.disabled);
+
   return (
     <div className="space-y-2">
       {label ? <Label>{label}</Label> : null}
@@ -33,14 +35,22 @@ function FieldRadioGroup({
                 key={option.value}
                 className={
                   optionClassName ??
-                  "flex flex-row items-center gap-4 text-sm text-foreground"
+                  "flex flex-row items-center gap-4 text-sm text-foreground select-none cursor-default"
                 }
               >
                 <RadioGroupItem
                   value={option.value}
-                  disabled={option.disabled}
+                  disabled={option.disabled || isGroupDisabled}
                 />
-                <span>{option.label}</span>
+                <span
+                  className={
+                    option.disabled || isGroupDisabled
+                      ? "cursor-default"
+                      : "cursor-pointer"
+                  }
+                >
+                  {option.label}
+                </span>
               </label>
             ))}
       </RadioGroup>

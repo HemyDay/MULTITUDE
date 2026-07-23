@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import { Label as UiLabel } from "@/components/ui/label";
+import { UiLabel } from "@/components/form/ux/Label";
 import {
-  ToggleGroup as UiToggleGroup,
+  UiToggleGroup,
   ToggleGroupItem,
-} from "@/components/ui/toggle-group";
+} from "@/components/form/ux/ToggleGroup";
 
 type FieldToggleGroupProps = React.ComponentPropsWithoutRef<
   typeof UiToggleGroup
