@@ -14,13 +14,12 @@ import { FieldTextarea } from "@/components/form/composition/FieldTextArea";
 import { FieldToggleGroup } from "@/components/form/composition/FieldToggleGroup";
 import { Button } from "@/components/buttons/composition/Button";
 import { ButtonGroup } from "@/components/buttons/composition/ButtonGroup";
-import { ButtonGroupSeparator } from "@/components/buttons/composition/ButtonGroupSeparator";
-import { ButtonGroupText } from "@/components/buttons/composition/ButtonGroupText";
 import { Badge } from "@/components/feedback/composition/Badge";
 import { Alert } from "@/components/feedback/composition/Alert";
 import { Card } from "@/components/display/composition/Card";
 import { Label } from "@/components/form/composition/Label";
 import MainLayout from "@/components/layout/MainLayout";
+import { Snail } from "lucide-react";
 
 type EditableValue = string | number | boolean;
 
@@ -72,11 +71,16 @@ const toggleOptions = [
   { label: "Underline", value: "underline" },
 ];
 
+const buttonSizeOptions = ["default", "xs", "sm", "lg"] as const;
+
 const compositionComponents: ShowcaseItem[] = [
   {
     name: "Button",
     fields: [
       { key: "children", label: "children", kind: "text" },
+      { key: "disabled", label: "disabled", kind: "boolean" },
+      { key: "startIcon", label: "startIcon", kind: "boolean" },
+      { key: "endIcon", label: "endIcon", kind: "boolean" },
       {
         key: "variant",
         label: "variant",
@@ -90,53 +94,42 @@ const compositionComponents: ShowcaseItem[] = [
           { label: "link", value: "link" },
         ],
       },
-      {
-        key: "size",
-        label: "size",
-        kind: "select",
-        options: [
-          { label: "default", value: "default" },
-          { label: "xs", value: "xs" },
-          { label: "sm", value: "sm" },
-          { label: "lg", value: "lg" },
-          { label: "icon", value: "icon" },
-          { label: "icon-xs", value: "icon-xs" },
-          { label: "icon-sm", value: "icon-sm" },
-          { label: "icon-lg", value: "icon-lg" },
-        ],
-      },
     ],
     initialValues: {
       children: "Click me",
       variant: "default",
-      size: "default",
+      disabled: false,
     },
-    renderPreview: (values) => (
-      <Button
-        variant={
-          String(values.variant) as
-            | "default"
-            | "outline"
-            | "secondary"
-            | "ghost"
-            | "destructive"
-            | "link"
-        }
-        size={
-          String(values.size) as
-            | "default"
-            | "xs"
-            | "sm"
-            | "lg"
-            | "icon"
-            | "icon-xs"
-            | "icon-sm"
-            | "icon-lg"
-        }
-      >
-        {String(values.children)}
-      </Button>
-    ),
+    renderPreview: (values) => {
+      const selectedVariant = String(values.variant) as
+        | "default"
+        | "outline"
+        | "secondary"
+        | "ghost"
+        | "destructive"
+        | "link";
+
+      return (
+        <div className="space-y-3">
+          {buttonSizeOptions.map((size) => (
+            <div key={size} className="flex items-center gap-3">
+              <span className="w-16 shrink-0 text-xs text-muted-foreground">
+                {size}
+              </span>
+              <Button
+                disabled={Boolean(values.disabled)}
+                variant={selectedVariant}
+                size={size}
+                startIcon={values.startIcon ? Snail : undefined}
+                endIcon={values.endIcon ? Snail : undefined}
+              >
+                {String(values.children)}
+              </Button>
+            </div>
+          ))}
+        </div>
+      );
+    },
   },
   {
     name: "ButtonGroup",
@@ -150,25 +143,64 @@ const compositionComponents: ShowcaseItem[] = [
           { label: "vertical", value: "vertical" },
         ],
       },
-      { key: "label", label: "label", kind: "text" },
+      { key: "primaryLabel", label: "primaryLabel", kind: "text" },
+      {
+        key: "primaryVariant",
+        label: "primaryVariant",
+        kind: "select",
+        options: [
+          { label: "default", value: "default" },
+          { label: "outline", value: "outline" },
+          { label: "secondary", value: "secondary" },
+          { label: "ghost", value: "ghost" },
+          { label: "destructive", value: "destructive" },
+          { label: "link", value: "link" },
+        ],
+      },
+      { key: "textLabel", label: "textLabel", kind: "text" },
     ],
     initialValues: {
       orientation: "horizontal",
-      label: "Options",
+      primaryLabel: "Options",
+      secondaryLabel: "More options",
+      primaryVariant: "outline",
+      textLabel: "Shared state",
     },
     renderPreview: (values) => (
       <ButtonGroup
         orientation={String(values.orientation) as "horizontal" | "vertical"}
-      >
-        <Button size="sm" variant="outline">
-          {String(values.label)}
-        </Button>
-        <Button size="sm" variant="secondary">
-          Save
-        </Button>
-        <ButtonGroupSeparator orientation="vertical" />
-        <ButtonGroupText>Shared</ButtonGroupText>
-      </ButtonGroup>
+        items={[
+          {
+            label: String(values.primaryLabel),
+            type: "button",
+            action: () => {
+              console.info("ButtonGroup primary action", values.primaryLabel);
+            },
+            variant: String(values.primaryVariant) as
+              | "default"
+              | "outline"
+              | "secondary"
+              | "ghost"
+              | "destructive"
+              | "link",
+          },
+          {
+            label: String(values.secondaryLabel),
+            type: "button",
+            action: () => {
+              console.info(
+                "ButtonGroup secondary action",
+                values.secondaryLabel,
+              );
+            },
+            variant: "default",
+          },
+          {
+            label: String(values.textLabel),
+            type: "text",
+          },
+        ]}
+      />
     ),
   },
   {
