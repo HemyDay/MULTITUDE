@@ -1,12 +1,15 @@
 import * as React from "react";
 
-import { Input } from "@/components/form/light/Input";
-import { uxFormStyles } from "./styles";
+import { ComboboxInput } from "@/components/ui/combobox";
+import { uxFormStyles } from "@/components/form/ux/styles";
 import { cn } from "@/lib/utils";
 
-function UiInput({ className, ...props }: React.ComponentProps<typeof Input>) {
+function UiComboboxInput({
+  className,
+  ...props
+}: React.ComponentProps<typeof ComboboxInput>) {
   return (
-    <Input
+    <ComboboxInput
       className={cn(
         uxFormStyles.fieldFocus,
         uxFormStyles.fieldPlaceholder,
@@ -18,4 +21,4 @@ function UiInput({ className, ...props }: React.ComponentProps<typeof Input>) {
   );
 }
 
-export { UiInput };
+export { UiComboboxInput };

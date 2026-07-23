@@ -43,7 +43,7 @@ export default function NavigationMenu() {
                 key={label}
                 href={href}
                 className={cn(
-                  "flex gap-3 rounded-[8px] p-3",
+                  "flex rounded-[8px] p-3",
                   isActive
                     ? "bg-primary text-on-primary "
                     : "text-foreground hover:bg-background hover:text-primary",

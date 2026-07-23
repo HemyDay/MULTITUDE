@@ -19,12 +19,14 @@ export default function MainLayout({
   return (
     <div
       className={cn(
-        `flex h-screen w-screen overflow-hidden bg-background p-4 gap-4 ${theme}`,
+        `flex flex-row h-screen w-screen overflow-hidden bg-background p-4 gap-4 ${theme}`,
         isMobile && "pb-21.25",
       )}
     >
       <NavigationMenu />
-      <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        {children}
+      </div>
     </div>
   );
 }

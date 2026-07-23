@@ -71,7 +71,8 @@
   --grey: #CCD1D9;
 
   /* Overwritten */
-  --primary: oklch(0.205 0 0);
+  --primary: #5D9CEC;
+  --primary-dark: #4A89DC;
   --background: color-mix(in srgb, white 92%, var(--primary) 8%);
 
   /* Unused */
