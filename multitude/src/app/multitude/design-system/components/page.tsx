@@ -12,6 +12,8 @@ import { FieldSlider } from "@/components/form/composition/FieldSlider";
 import { FieldSwitch } from "@/components/form/composition/FieldSwitch";
 import { FieldTextarea } from "@/components/form/composition/FieldTextArea";
 import { FieldToggleGroup } from "@/components/form/composition/FieldToggleGroup";
+import { Alert } from "@/components/feedback/composition/Alert";
+import { Card } from "@/components/display/composition/Card";
 import { Label } from "@/components/form/composition/Label";
 import MainLayout from "@/components/layout/MainLayout";
 
@@ -514,6 +516,76 @@ const compositionComponents: ShowcaseItem[] = [
     },
   },
   {
+    name: "Alert",
+    fields: [
+      { key: "title", label: "title", kind: "text" },
+      { key: "description", label: "description", kind: "textarea" },
+      {
+        key: "variant",
+        label: "variant",
+        kind: "select",
+        options: [
+          { label: "default", value: "default" },
+          { label: "destructive", value: "destructive" },
+        ],
+      },
+      { key: "showAction", label: "showAction", kind: "boolean" },
+      { key: "actionLabel", label: "actionLabel", kind: "text" },
+    ],
+    initialValues: {
+      title: "Heads up",
+      description:
+        "Your session will expire in 10 minutes if you do not interact.",
+      variant: "default",
+      showAction: true,
+      actionLabel: "Dismiss",
+    },
+    renderPreview: (values) => (
+      <Alert
+        variant={String(values.variant) as "default" | "destructive"}
+        title={String(values.title)}
+        description={String(values.description)}
+        action={
+          values.showAction ? (
+            <button
+              type="button"
+              className="rounded-md border border-border bg-background px-2 py-1 text-xs font-medium text-foreground"
+            >
+              {String(values.actionLabel)}
+            </button>
+          ) : null
+        }
+      />
+    ),
+  },
+  {
+    name: "Card",
+    fields: [
+      { key: "title", label: "title", kind: "text" },
+      { key: "description", label: "description", kind: "text" },
+      { key: "content", label: "content", kind: "textarea" },
+      { key: "footer", label: "footer", kind: "text" },
+    ],
+    initialValues: {
+      title: "Project overview",
+      description: "A compact summary of the current workspace status.",
+      content:
+        "This card is a composed surface that can hold any content and optional footer or actions.",
+      footer: "Updated just now",
+    },
+    renderPreview: (values) => (
+      <Card
+        title={String(values.title)}
+        description={String(values.description)}
+        footer={String(values.footer)}
+      >
+        <p className="text-sm leading-6 text-muted-foreground">
+          {String(values.content)}
+        </p>
+      </Card>
+    ),
+  },
+  {
     name: "Label",
     fields: [
       { key: "children", label: "children", kind: "text" },
@@ -636,15 +708,6 @@ export default function DesignSystemComponentsPage() {
   return (
     <MainLayout theme="dark-blue">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-10">
-        <div className="space-y-3">
-          <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-400">
-            Form composition
-          </p>
-          <h1 className="text-3xl font-semibold text-foreground">
-            Components from components/form/composition
-          </h1>
-        </div>
-
         <div className="space-y-8">
           {compositionComponents.map((component) => {
             const values =
@@ -655,7 +718,7 @@ export default function DesignSystemComponentsPage() {
             return (
               <section
                 key={component.name}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur"
+                className="p-6 bg-surface rounded-[8px]"
               >
                 <h1 className="mb-5 text-2xl font-semibold text-foreground">
                   {component.name}
