@@ -34,9 +34,12 @@ function UiComboboxInput({
   return (
     <LightComboboxInput
       className={cn(
-        uxFormStyles.fieldFocus,
+        uxFormStyles.fieldDefault,
+        uxFormStyles.wrapperfieldFocus,
         uxFormStyles.fieldPlaceholder,
         uxFormStyles.fieldDisabled,
+        "**:data-[slot=input-group-control]:p-0 **:data-[slot=input-group-control]:h-fit",
+        "**:data-[slot=input-group-addon]:p-0 **:data-[slot=input-group-button]:p-0",
         className,
       )}
       {...props}

@@ -15,7 +15,6 @@ function UiInput({
         uxFormStyles.fieldFocus,
         uxFormStyles.fieldPlaceholder,
         uxFormStyles.fieldDisabled,
-        "focus-visible:border-primary focus-visible:ring-0",
         className,
       )}
       {...props}

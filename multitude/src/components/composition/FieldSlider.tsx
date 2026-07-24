@@ -2,6 +2,10 @@ import * as React from "react";
 
 import { UiLabel } from "@/components/ux/Label";
 import { UiSlider } from "@/components/ux/Slider";
+import {
+  FORM_FIELD_HELPER_CLASS,
+  FORM_FIELD_WRAPPER_CLASS,
+} from "../ux/styles";
 
 interface FieldSliderProps extends React.ComponentProps<typeof UiSlider> {
   label?: string;
@@ -14,12 +18,29 @@ function FieldSlider({
   className,
   ...props
 }: FieldSliderProps) {
+  const [isFocused, setIsFocused] = React.useState(false);
+
   return (
-    <div className="space-y-2">
-      {label ? <UiLabel>{label}</UiLabel> : null}
-      <UiSlider className={className} {...props} />
+    <div className={FORM_FIELD_WRAPPER_CLASS}>
+      {label ? (
+        <UiLabel focused={isFocused} disabled={props.disabled}>
+          {label}
+        </UiLabel>
+      ) : null}
+      <UiSlider
+        className={className}
+        {...props}
+        onFocus={(event) => {
+          setIsFocused(true);
+          props.onFocus?.(event);
+        }}
+        onBlur={(event) => {
+          setIsFocused(false);
+          props.onBlur?.(event);
+        }}
+      />
       {helperText ? (
-        <p className="text-sm text-muted-foreground">{helperText}</p>
+        <p className={FORM_FIELD_HELPER_CLASS}>{helperText}</p>
       ) : null}
     </div>
   );

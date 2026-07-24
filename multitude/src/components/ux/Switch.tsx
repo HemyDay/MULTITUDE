@@ -11,7 +11,6 @@ function UiSwitch({
   return (
     <LightSwitch
       className={cn(
-        uxFormStyles.controlFocus,
         uxFormStyles.controlDisabled,
         className,
         "cursor-pointer disabled:cursor-default",

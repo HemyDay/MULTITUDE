@@ -1,7 +1,11 @@
 import * as React from "react";
 
-import { UiToggleGroup, ToggleGroupItem } from "@/components/ux/ToggleGroup";
+import { UiToggleGroup, UiToggleGroupItem } from "@/components/ux/ToggleGroup";
 import { UiLabel } from "@/components/ux/Label";
+import {
+  FORM_FIELD_HELPER_CLASS,
+  FORM_FIELD_WRAPPER_CLASS,
+} from "../ux/styles";
 
 type FieldToggleGroupProps = React.ComponentPropsWithoutRef<
   typeof UiToggleGroup
@@ -21,23 +25,23 @@ function FieldToggleGroup({
   ...props
 }: FieldToggleGroupProps) {
   return (
-    <div className="space-y-2">
-      {label ? <UiLabel>{label}</UiLabel> : null}
+    <div className={FORM_FIELD_WRAPPER_CLASS}>
+      {label ? <UiLabel disabled={props.disabled}>{label}</UiLabel> : null}
       <UiToggleGroup className={className} {...props}>
         {children
           ? children
           : options?.map((option) => (
-              <ToggleGroupItem
+              <UiToggleGroupItem
                 key={option.value}
                 value={option.value}
                 disabled={option.disabled}
               >
                 {option.label}
-              </ToggleGroupItem>
+              </UiToggleGroupItem>
             ))}
       </UiToggleGroup>
       {helperText ? (
-        <p className="text-sm text-muted-foreground">{helperText}</p>
+        <p className={FORM_FIELD_HELPER_CLASS}>{helperText}</p>
       ) : null}
     </div>
   );

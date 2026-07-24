@@ -11,6 +11,7 @@ function UiTextarea({
   return (
     <LightTextarea
       className={cn(
+        uxFormStyles.fieldDefault,
         uxFormStyles.fieldFocus,
         uxFormStyles.fieldPlaceholder,
         uxFormStyles.fieldDisabled,

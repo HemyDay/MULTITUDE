@@ -10,6 +10,7 @@ import {
   type ButtonGroupItem,
 } from "@/components/composition/ButtonGroup";
 import { Card } from "@/components/composition/Card";
+import { Container } from "@/components/composition/Container";
 import { FieldCheckbox } from "@/components/composition/FieldCheckbox";
 import { FieldCombobox } from "@/components/composition/FieldCombobox";
 import { FieldInput } from "@/components/composition/FieldInput";
@@ -117,6 +118,23 @@ function CompositionShowcase() {
                 footer.
               </p>
             </Card>
+          </ShowcasePanel>
+
+          <ShowcasePanel title="Container">
+            <Container
+              title="Section projet"
+              description="Bloc de contenu avec action contextuelle"
+              action={
+                <Button size="sm" variant="outline">
+                  Modifier
+                </Button>
+              }
+            >
+              <p className="text-sm text-muted-foreground">
+                Utilisez Container pour encadrer une section reusable avec
+                titre, description et action.
+              </p>
+            </Container>
           </ShowcasePanel>
 
           <ShowcasePanel title="Input Fields">

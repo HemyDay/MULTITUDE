@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { FORM_FIELD_WRAPPER_CLASS } from "../ux/styles";
 import {
   UiCombobox,
   UiComboboxInput,
@@ -31,12 +31,41 @@ function FieldCombobox({
   ...props
 }: FieldComboboxProps) {
   const hasOptions = Boolean(options && options.length > 0);
+  const generatedId = React.useId();
+  const inputId = props.id ?? generatedId;
+  const [isFocused, setIsFocused] = React.useState(false);
+
+  const handleFocus: React.FocusEventHandler<HTMLInputElement> = (event) => {
+    setIsFocused(true);
+    props.onFocus?.({
+      ...event,
+      preventBaseUIHandler: () => {},
+    } as any);
+  };
+
+  const handleBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
+    setIsFocused(false);
+    props.onBlur?.({
+      ...event,
+      preventBaseUIHandler: () => {},
+    } as any);
+  };
 
   return (
-    <div className="space-y-2">
-      {label ? <UiLabel>{label}</UiLabel> : null}
+    <div className={FORM_FIELD_WRAPPER_CLASS}>
+      {label ? (
+        <UiLabel htmlFor={inputId} focused={isFocused}>
+          {label}
+        </UiLabel>
+      ) : null}
       <UiCombobox {...comboboxProps}>
-        <UiComboboxInput className={className} {...props}>
+        <UiComboboxInput
+          id={inputId}
+          className={className}
+          {...props}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        >
           {children ? (
             children
           ) : (

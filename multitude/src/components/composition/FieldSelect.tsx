@@ -2,12 +2,12 @@ import * as React from "react";
 
 import { UiLabel } from "@/components/ux/Label";
 import {
-  Select as UiSelect,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  UiSelect,
+  UiSelectContent,
+  UiSelectItem,
+  UiSelectTrigger,
+  UiSelectValue,
+} from "@/components/ux/Select";
 
 type FieldSelectProps = React.ComponentProps<typeof UiSelect> & {
   label?: string;
@@ -38,20 +38,20 @@ function FieldSelect({
           children
         ) : (
           <>
-            <SelectTrigger className={triggerClassName}>
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent className={contentClassName}>
+            <UiSelectTrigger className={triggerClassName}>
+              <UiSelectValue placeholder={placeholder} />
+            </UiSelectTrigger>
+            <UiSelectContent className={contentClassName}>
               {options?.map((option) => (
-                <SelectItem
+                <UiSelectItem
                   key={option.value}
                   value={option.value}
                   disabled={option.disabled}
                 >
                   {option.label}
-                </SelectItem>
+                </UiSelectItem>
               ))}
-            </SelectContent>
+            </UiSelectContent>
           </>
         )}
       </UiSelect>

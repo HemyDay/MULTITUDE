@@ -13,17 +13,13 @@ function UiToggleGroup({
 }: React.ComponentProps<typeof LightToggleGroup>) {
   return (
     <LightToggleGroup
-      className={cn(
-        uxFormStyles.controlFocus,
-        uxFormStyles.controlDisabled,
-        className,
-      )}
+      className={cn(uxFormStyles.controlDisabled, className)}
       {...props}
     />
   );
 }
 
-function ToggleGroupItem({
+function UiToggleGroupItem({
   className,
   ...props
 }: React.ComponentProps<typeof LightToggleGroupItem>) {
@@ -35,4 +31,4 @@ function ToggleGroupItem({
   );
 }
 
-export { UiToggleGroup, ToggleGroupItem };
+export { UiToggleGroup, UiToggleGroupItem };

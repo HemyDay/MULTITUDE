@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { UiInput } from "@/components/ux/Input";
 import { Label } from "@/components/composition/Label";
+import { FORM_FIELD_WRAPPER_CLASS } from "../ux/styles";
 
 interface FieldInputProps extends React.ComponentProps<typeof UiInput> {
   label?: string;
@@ -33,7 +34,7 @@ function FieldInput({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={FORM_FIELD_WRAPPER_CLASS}>
       {label ? (
         <Label
           htmlFor={inputId}

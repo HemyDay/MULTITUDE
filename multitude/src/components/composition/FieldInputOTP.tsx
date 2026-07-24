@@ -2,6 +2,10 @@ import * as React from "react";
 
 import { UiLabel } from "@/components/ux/Label";
 import {
+  FORM_FIELD_HELPER_CLASS,
+  FORM_FIELD_WRAPPER_CLASS,
+} from "../ux/styles";
+import {
   InputOTP as UiInputOTP,
   InputOTPGroup,
   InputOTPSlot,
@@ -27,6 +31,10 @@ function FieldInputOTP({
   children,
   ...props
 }: FieldInputOTPProps) {
+  const generatedId = React.useId();
+  const inputId = props.id ?? generatedId;
+  const [isFocused, setIsFocused] = React.useState(false);
+
   const normalizedSlotCount =
     typeof slotCount === "number" && slotCount > 0
       ? slotCount
@@ -35,12 +43,29 @@ function FieldInputOTP({
         : 6;
 
   return (
-    <div className="space-y-2">
-      {label ? <UiLabel>{label}</UiLabel> : null}
+    <div className={FORM_FIELD_WRAPPER_CLASS}>
+      {label ? (
+        <UiLabel
+          htmlFor={inputId}
+          focused={isFocused}
+          disabled={props.disabled}
+        >
+          {label}
+        </UiLabel>
+      ) : null}
       <UiInputOTP
+        id={inputId}
         className={className}
         maxLength={normalizedSlotCount}
         {...props}
+        onFocus={(event) => {
+          setIsFocused(true);
+          props.onFocus?.(event);
+        }}
+        onBlur={(event) => {
+          setIsFocused(false);
+          props.onBlur?.(event);
+        }}
       >
         {children ? (
           children
@@ -53,7 +78,7 @@ function FieldInputOTP({
         )}
       </UiInputOTP>
       {helperText ? (
-        <p className="text-sm text-muted-foreground">{helperText}</p>
+        <p className={FORM_FIELD_HELPER_CLASS}>{helperText}</p>
       ) : null}
     </div>
   );
