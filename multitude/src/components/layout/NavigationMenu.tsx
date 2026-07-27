@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  AppWindow,
   Calendar1,
+  DiamondPlus,
   FileText,
   LayoutDashboard,
   LucideIcon,
   Map,
+  SquareKanban,
   Table2,
   X,
 } from "lucide-react";
@@ -22,6 +23,12 @@ const navigationItems: { label: string; icon: LucideIcon; href: string }[] = [
   { label: "Formulaire", icon: FileText, href: "/multitude/complex-form" },
   { label: "Data Table", icon: Table2, href: "/multitude/data-table" },
   { label: "Carte", icon: Map, href: "/multitude/map" },
+  { label: "Kanban", icon: SquareKanban, href: "/multitude/kanban" },
+  {
+    label: "Diagram Maker",
+    icon: DiamondPlus,
+    href: "/multitude/diagram-maker",
+  },
 ];
 
 export default function NavigationMenu() {
