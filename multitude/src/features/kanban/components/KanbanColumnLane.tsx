@@ -1,6 +1,9 @@
 "use client";
 
-import { type TicketWithRelations } from "@/features/kanban/api";
+import {
+  type TicketUser,
+  type TicketWithRelations,
+} from "@/features/kanban/api";
 import { useDrag, useDrop } from "react-dnd";
 import { KanbanCard } from "./KanbanCard";
 
@@ -14,11 +17,18 @@ type DragItem<TColumnId extends string> = {
 type DraggableKanbanCardProps<TColumnId extends string> = {
   card: TicketWithRelations;
   columnId: TColumnId;
+  ticketUsers: TicketUser[];
+  onAssignUser: (
+    ticketId: number,
+    assignedToId: number | null,
+  ) => Promise<void>;
 };
 
 const DraggableKanbanCard = <TColumnId extends string>({
   card,
   columnId,
+  ticketUsers,
+  onAssignUser,
 }: DraggableKanbanCardProps<TColumnId>) => {
   const [{ isDragging }, dragRef] = useDrag<
     DragItem<TColumnId>,
@@ -44,7 +54,12 @@ const DraggableKanbanCard = <TColumnId extends string>({
         dragRef(node);
       }}
     >
-      <KanbanCard card={card} isDragging={isDragging} />
+      <KanbanCard
+        card={card}
+        isDragging={isDragging}
+        ticketUsers={ticketUsers}
+        onAssignUser={onAssignUser}
+      />
     </div>
   );
 };
@@ -52,17 +67,24 @@ const DraggableKanbanCard = <TColumnId extends string>({
 export type KanbanColumnLaneProps<TColumnId extends string> = {
   columnId: TColumnId;
   cards: TicketWithRelations[];
+  ticketUsers: TicketUser[];
   onMove: (
     itemId: number,
     fromColumnId: TColumnId,
     toColumnId: TColumnId,
   ) => void;
+  onAssignUser: (
+    ticketId: number,
+    assignedToId: number | null,
+  ) => Promise<void>;
 };
 
 export const KanbanColumnLane = <TColumnId extends string>({
   columnId,
   cards,
+  ticketUsers,
   onMove,
+  onAssignUser,
 }: KanbanColumnLaneProps<TColumnId>) => {
   const [{ isOver }, dropRef] = useDrop<
     DragItem<TColumnId>,
@@ -90,7 +112,13 @@ export const KanbanColumnLane = <TColumnId extends string>({
       style={{ backgroundColor: isOver ? "#f8fafc" : "transparent" }}
     >
       {cards.map((card) => (
-        <DraggableKanbanCard key={card.id} card={card} columnId={columnId} />
+        <DraggableKanbanCard
+          key={card.id}
+          card={card}
+          columnId={columnId}
+          ticketUsers={ticketUsers}
+          onAssignUser={onAssignUser}
+        />
       ))}
     </div>
   );

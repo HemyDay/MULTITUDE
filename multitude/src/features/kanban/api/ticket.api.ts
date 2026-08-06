@@ -34,8 +34,20 @@ export type TicketWithRelations = Ticket & {
 // --- TicketUser ---
 
 export const findAllTicketUsers = async () => {
-  const { data, error } = await supabase.from("ticket_user").select("*");
-  return { data: data as TicketUser[] | null, error };
+  try {
+    const response = await fetch("/api/ticket-user", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ticket users: ${response.status}`);
+    }
+
+    const data = (await response.json()) as TicketUser[];
+    return { data, error: null };
+  } catch (error) {
+    return { data: null, error };
+  }
 };
 
 export const insertTicketUser = async (payload: Omit<TicketUser, "id">) =>

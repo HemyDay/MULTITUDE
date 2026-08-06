@@ -6,8 +6,10 @@ import { Container } from "@/components/composition/Container";
 import { Dialog } from "@/components/composition/Dialog";
 import { useToasts } from "@/components/layout/Toasts";
 import {
+  findAllTicketUsers,
   findAllTickets,
   updateTicket,
+  type TicketUser,
   type TicketWithRelations,
 } from "@/features/kanban/api";
 import { KanbanColumnLane } from "./KanbanColumnLane";
@@ -73,9 +75,11 @@ const canMoveToNextColumnOnly = (
 export const KanbanContainer = () => {
   const { addToast } = useToasts();
   const [tickets, setTickets] = useState<TicketWithRelations[]>([]);
+  const [ticketUsers, setTicketUsers] = useState<TicketUser[]>([]);
   const [isInvalidMoveDialogOpen, setIsInvalidMoveDialogOpen] = useState(false);
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const hasStartedFetchRef = useRef(false);
+  const hasStartedUsersFetchRef = useRef(false);
 
   if (!hasStartedFetchRef.current) {
     hasStartedFetchRef.current = true;
@@ -87,6 +91,19 @@ export const KanbanContainer = () => {
       })
       .catch((error) => {
         console.error("[KanbanContainer] Failed to load tickets:", error);
+      });
+  }
+
+  if (!hasStartedUsersFetchRef.current) {
+    hasStartedUsersFetchRef.current = true;
+
+    void findAllTicketUsers()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        setTicketUsers(data ?? []);
+      })
+      .catch((error) => {
+        console.error("[KanbanContainer] Failed to load ticket users:", error);
       });
   }
 
@@ -179,6 +196,69 @@ export const KanbanContainer = () => {
     [applyMove],
   );
 
+  const assignUser = useCallback(
+    async (itemId: number, assignedToId: number | null) => {
+      const ticketTitle = `Ticket #${itemId}`;
+      const selectedUser =
+        ticketUsers.find((user) => user.id === assignedToId) ?? null;
+      const targetLabel = selectedUser?.fullName ?? "Unassigned";
+      const groupId = `assign-${itemId}-${Date.now()}`;
+
+      let previousTickets: TicketWithRelations[] = [];
+
+      setTickets((prev) => {
+        previousTickets = prev;
+
+        return prev.map((ticket) =>
+          ticket.id === itemId
+            ? {
+                ...ticket,
+                assigned_to_id: assignedToId,
+                assigned_to: selectedUser,
+              }
+            : ticket,
+        );
+      });
+
+      addToast(
+        "info",
+        "Affectation en cours...",
+        `${ticketTitle} est en cours d'affectation à ${targetLabel}`,
+        3000,
+        groupId,
+      );
+
+      try {
+        const { error } = await updateTicket(itemId, {
+          assigned_to_id: assignedToId,
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        addToast(
+          "success",
+          "Affectation réussie",
+          `${ticketTitle} a été affecté à ${targetLabel}`,
+          3000,
+          groupId,
+        );
+      } catch (error) {
+        setTickets(previousTickets);
+
+        addToast(
+          "destructive",
+          "Erreur",
+          `Impossible de modifier l'affectation de ${ticketTitle}`,
+          3000,
+          groupId,
+        );
+      }
+    },
+    [addToast, ticketUsers],
+  );
+
   const handleCancelInvalidMove = useCallback(() => {
     setPendingMove(null);
     setIsInvalidMoveDialogOpen(false);
@@ -242,14 +322,16 @@ export const KanbanContainer = () => {
               >
                 <div className="flex uppercase text-base flex-row gap-2 items-center justify-start ">
                   <Icon size={16} />
-                  <span>{column.label}</span>
+                  <span className="select-none">{column.label}</span>
                 </div>
                 <KanbanColumnLane
                   columnId={column.id}
                   cards={tickets.filter(
                     (ticket) => ticket.column === column.id,
                   )}
+                  ticketUsers={ticketUsers}
                   onMove={moveItem}
+                  onAssignUser={assignUser}
                 />
               </div>
             );
