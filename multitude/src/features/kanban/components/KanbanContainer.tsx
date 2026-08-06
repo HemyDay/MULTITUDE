@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { Button } from "@/components/composition/Button";
 import { Container } from "@/components/composition/Container";
+import { Dialog } from "@/components/composition/Dialog";
 import {
   findAllTickets,
   type TicketWithRelations,
@@ -33,6 +35,12 @@ type KanbanColumn = {
   label: string;
 };
 
+type PendingMove = {
+  itemId: number;
+  fromColumnId: ColumnId;
+  toColumnId: ColumnId;
+};
+
 const columns: KanbanColumn[] = [
   { id: "todo", icon: ListTodo, label: "TO DO" },
   { id: "inDevelopment", icon: CodeXml, label: "IN DEVELOPMENT" },
@@ -42,8 +50,28 @@ const columns: KanbanColumn[] = [
   { id: "done", icon: ShieldCheck, label: "DONE" },
 ];
 
+const columnProgression: ColumnId[] = [
+  "todo",
+  "inDevelopment",
+  "toReview",
+  "toTest",
+  "inTest",
+  "done",
+];
+
+const canMoveToNextColumnOnly = (
+  fromColumnId: ColumnId,
+  toColumnId: ColumnId,
+): boolean => {
+  const fromIndex = columnProgression.indexOf(fromColumnId);
+  const toIndex = columnProgression.indexOf(toColumnId);
+  return toIndex === fromIndex + 1;
+};
+
 export const KanbanContainer = () => {
   const [tickets, setTickets] = useState<TicketWithRelations[]>([]);
+  const [isInvalidMoveDialogOpen, setIsInvalidMoveDialogOpen] = useState(false);
+  const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const hasStartedFetchRef = useRef(false);
 
   if (!hasStartedFetchRef.current) {
@@ -59,12 +87,8 @@ export const KanbanContainer = () => {
       });
   }
 
-  const moveItem = useCallback(
+  const applyMove = useCallback(
     (itemId: number, fromColumnId: ColumnId, toColumnId: ColumnId) => {
-      if (fromColumnId === toColumnId) {
-        return;
-      }
-
       setTickets((prev) => {
         const movedTicket = prev.find((ticket) => ticket.id === itemId);
         if (!movedTicket) {
@@ -83,9 +107,76 @@ export const KanbanContainer = () => {
     [],
   );
 
+  const moveItem = useCallback(
+    (itemId: number, fromColumnId: ColumnId, toColumnId: ColumnId) => {
+      if (fromColumnId === toColumnId) {
+        return;
+      }
+
+      if (!canMoveToNextColumnOnly(fromColumnId, toColumnId)) {
+        setPendingMove({ itemId, fromColumnId, toColumnId });
+        setIsInvalidMoveDialogOpen(true);
+        return;
+      }
+
+      applyMove(itemId, fromColumnId, toColumnId);
+    },
+    [applyMove],
+  );
+
+  const handleCancelInvalidMove = useCallback(() => {
+    setPendingMove(null);
+    setIsInvalidMoveDialogOpen(false);
+  }, []);
+
+  const handleForceInvalidMove = useCallback(() => {
+    if (!pendingMove) {
+      setIsInvalidMoveDialogOpen(false);
+      return;
+    }
+
+    applyMove(
+      pendingMove.itemId,
+      pendingMove.fromColumnId,
+      pendingMove.toColumnId,
+    );
+    setPendingMove(null);
+    setIsInvalidMoveDialogOpen(false);
+  }, [applyMove, pendingMove]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Container className="h-full w-full gap-0">
+        <Dialog
+          open={isInvalidMoveDialogOpen}
+          onOpenChange={(open) => {
+            setIsInvalidMoveDialogOpen(open);
+            if (!open) {
+              setPendingMove(null);
+            }
+          }}
+          variantStyle="destructive"
+          title="Deplacement non autorise"
+          description="Vous ne pouvez deplacer une carte que vers la colonne suivante."
+          footer={
+            <>
+              <Button
+                onClick={handleForceInvalidMove}
+                size="sm"
+                variant="outline"
+              >
+                Deplacer quand même
+              </Button>
+              <Button
+                onClick={handleCancelInvalidMove}
+                size="sm"
+                variant="destructive"
+              >
+                Annuler le deplacement
+              </Button>
+            </>
+          }
+        />
         <div className="w-full h-full flex gap-4 overflow-x-auto">
           {columns.map((column) => {
             const Icon = column.icon;

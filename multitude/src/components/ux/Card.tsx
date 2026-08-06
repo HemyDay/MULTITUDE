@@ -1,4 +1,5 @@
 import * as React from "react";
+import { cn } from "@/lib/utils";
 
 import {
   LightCard,
@@ -9,12 +10,15 @@ import {
   LightCardHeader,
   LightCardTitle,
 } from "@/components/light/Card";
+import { uxSurfaceStyles } from "@/components/ux/styles";
 
 function UiCard({
   className,
   ...props
 }: React.ComponentProps<typeof LightCard>) {
-  return <LightCard className={className} {...props} />;
+  return (
+    <LightCard className={cn(uxSurfaceStyles.root, className)} {...props} />
+  );
 }
 
 function UiCardAction({
@@ -35,28 +39,48 @@ function UiCardDescription({
   className,
   ...props
 }: React.ComponentProps<typeof LightCardDescription>) {
-  return <LightCardDescription className={className} {...props} />;
+  return (
+    <LightCardDescription
+      className={cn(uxSurfaceStyles.description, className)}
+      {...props}
+    />
+  );
 }
 
 function UiCardFooter({
   className,
   ...props
 }: React.ComponentProps<typeof LightCardFooter>) {
-  return <LightCardFooter className={className} {...props} />;
+  return (
+    <LightCardFooter
+      className={cn(uxSurfaceStyles.footer, className)}
+      {...props}
+    />
+  );
 }
 
 function UiCardHeader({
   className,
   ...props
 }: React.ComponentProps<typeof LightCardHeader>) {
-  return <LightCardHeader className={className} {...props} />;
+  return (
+    <LightCardHeader
+      className={cn(uxSurfaceStyles.header, className)}
+      {...props}
+    />
+  );
 }
 
 function UiCardTitle({
   className,
   ...props
 }: React.ComponentProps<typeof LightCardTitle>) {
-  return <LightCardTitle className={className} {...props} />;
+  return (
+    <LightCardTitle
+      className={cn(uxSurfaceStyles.title, className)}
+      {...props}
+    />
+  );
 }
 
 export {

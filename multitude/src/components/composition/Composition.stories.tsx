@@ -11,6 +11,7 @@ import {
 } from "@/components/composition/ButtonGroup";
 import { Card } from "@/components/composition/Card";
 import { Container } from "@/components/composition/Container";
+import { Dialog } from "@/components/composition/Dialog";
 import { FieldCheckbox } from "@/components/composition/FieldCheckbox";
 import { FieldCombobox } from "@/components/composition/FieldCombobox";
 import { FieldInput } from "@/components/composition/FieldInput";
@@ -135,6 +136,20 @@ function CompositionShowcase() {
                 titre, description et action.
               </p>
             </Container>
+          </ShowcasePanel>
+
+          <ShowcasePanel title="Dialog">
+            <Dialog
+              title="Publier les changements"
+              description="Confirmez la publication de cette version pour tous les utilisateurs."
+              trigger={<Button size="sm">Ouvrir</Button>}
+              footer={<Button size="sm">Publier</Button>}
+            >
+              <p className="text-sm text-muted-foreground">
+                Vous pouvez utiliser ce composant pour les confirmations,
+                formulaires rapides ou details contextuels.
+              </p>
+            </Dialog>
           </ShowcasePanel>
 
           <ShowcasePanel title="Input Fields">

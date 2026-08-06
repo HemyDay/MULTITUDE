@@ -3,21 +3,27 @@ import { cn } from "@/lib/utils";
 
 import { LightButton } from "@/components/light/Button";
 
-function UiButton({
-  variant,
-  size,
-  className,
-  ...props
-}: React.ComponentProps<typeof LightButton>) {
-  const variantClassNameByType: Record<
-    NonNullable<React.ComponentProps<typeof LightButton>["variant"]>,
-    string
-  > = {
+type LightButtonProps = React.ComponentProps<typeof LightButton>;
+type BaseVariant = NonNullable<LightButtonProps["variant"]>;
+type UiVariant = BaseVariant | "info" | "warning" | "success";
+
+interface UiButtonProps extends Omit<LightButtonProps, "variant"> {
+  variant?: UiVariant;
+}
+
+function UiButton({ variant, size, className, ...props }: UiButtonProps) {
+  const variantClassNameByType: Record<UiVariant, string> = {
     default: "",
     outline: "",
     secondary: "",
     ghost: "",
-    destructive: "",
+    info: "bg-info/10 text-info hover:bg-info/20 focus-visible:border-info/40 focus-visible:ring-info/20 dark:bg-info/20 dark:hover:bg-info/30 dark:focus-visible:ring-info/40",
+    warning:
+      "bg-warning/10 text-warning hover:bg-warning/20 focus-visible:border-warning/40 focus-visible:ring-warning/20 dark:bg-warning/20 dark:hover:bg-warning/30 dark:focus-visible:ring-warning/40",
+    success:
+      "bg-success/10 text-success hover:bg-success/20 focus-visible:border-success/40 focus-visible:ring-success/20 dark:bg-success/20 dark:hover:bg-success/30 dark:focus-visible:ring-success/40",
+    destructive:
+      "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
     link: "",
   };
 
@@ -36,12 +42,17 @@ function UiButton({
     "icon-lg": "px-4 py-2",
   };
 
+  const resolvedVariant: BaseVariant =
+    variant === "info" || variant === "warning" || variant === "success"
+      ? "default"
+      : (variant ?? "default");
+
   return (
     <LightButton
-      variant={variant}
+      variant={resolvedVariant}
       size={size}
       className={cn(
-        "cursor-pointer disabled:cursor-auto rounded-[4px] w-fit h-fit",
+        "cursor-pointer disabled:cursor-auto rounded-lg w-fit h-fit",
         variantClassNameByType[variant ?? "default"],
         sizeClassNameByType[size ?? "default"],
         className,
