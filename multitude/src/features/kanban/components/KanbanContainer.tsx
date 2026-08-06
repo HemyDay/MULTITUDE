@@ -77,6 +77,8 @@ export const KanbanContainer = () => {
   const [tickets, setTickets] = useState<TicketWithRelations[]>([]);
   const [ticketUsers, setTicketUsers] = useState<TicketUser[]>([]);
   const [isInvalidMoveDialogOpen, setIsInvalidMoveDialogOpen] = useState(false);
+  const [isMissingAssigneeDialogOpen, setIsMissingAssigneeDialogOpen] =
+    useState(false);
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
   const hasStartedFetchRef = useRef(false);
   const hasStartedUsersFetchRef = useRef(false);
@@ -185,15 +187,26 @@ export const KanbanContainer = () => {
         return;
       }
 
+      const movedTicket = tickets.find((ticket) => ticket.id === itemId);
+      const isMissingAssigneeForTodoExit =
+        fromColumnId === "todo" &&
+        toColumnId !== "todo" &&
+        movedTicket?.assigned_to_id == null;
+
       if (!canMoveToNextColumnOnly(fromColumnId, toColumnId)) {
         setPendingMove({ itemId, fromColumnId, toColumnId });
         setIsInvalidMoveDialogOpen(true);
         return;
       }
 
+      if (isMissingAssigneeForTodoExit) {
+        setIsMissingAssigneeDialogOpen(true);
+        return;
+      }
+
       await applyMove(itemId, fromColumnId, toColumnId);
     },
-    [applyMove],
+    [applyMove, tickets],
   );
 
   const assignUser = useCallback(
@@ -270,14 +283,32 @@ export const KanbanContainer = () => {
       return;
     }
 
+    const movedTicket = tickets.find(
+      (ticket) => ticket.id === pendingMove.itemId,
+    );
+    const isMissingAssigneeForTodoExit =
+      pendingMove.fromColumnId === "todo" &&
+      pendingMove.toColumnId !== "todo" &&
+      movedTicket?.assigned_to_id == null;
+
+    setPendingMove(null);
+    setIsInvalidMoveDialogOpen(false);
+
+    if (isMissingAssigneeForTodoExit) {
+      setIsMissingAssigneeDialogOpen(true);
+      return;
+    }
+
     await applyMove(
       pendingMove.itemId,
       pendingMove.fromColumnId,
       pendingMove.toColumnId,
     );
-    setPendingMove(null);
-    setIsInvalidMoveDialogOpen(false);
-  }, [applyMove, pendingMove]);
+  }, [applyMove, pendingMove, tickets]);
+
+  const handleCloseMissingAssigneeDialog = useCallback(() => {
+    setIsMissingAssigneeDialogOpen(false);
+  }, []);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -310,6 +341,22 @@ export const KanbanContainer = () => {
                 Annuler le deplacement
               </Button>
             </>
+          }
+        />
+        <Dialog
+          open={isMissingAssigneeDialogOpen}
+          onOpenChange={setIsMissingAssigneeDialogOpen}
+          variantStyle="destructive"
+          title="Affectation requise"
+          description="Vous ne pouvez pas déplacer ce ticket. Assignez-le d'abord à un utilisateur."
+          footer={
+            <Button
+              onClick={handleCloseMissingAssigneeDialog}
+              variant="destructive"
+              size="sm"
+            >
+              Compris
+            </Button>
           }
         />
         <div className="modern-scrollbar w-full h-full flex gap-4 overflow-x-auto">
