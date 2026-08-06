@@ -25,7 +25,7 @@ export const KanbanCard = ({ card, isDragging = false }: KanbanCardProps) => {
 
   return (
     <div
-      className="group rounded-[4px] p-4 border-primary border flex flex-col gap-4 bg-surface"
+      className="group rounded-[4px] p-4 border-primary border flex flex-col gap-4 bg-surface cursor-grab"
       style={{ opacity: isDragging ? 0.4 : 1 }}
     >
       <div className="flex flex-row justify-between">

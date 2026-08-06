@@ -106,6 +106,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Scrollbar */
+  --scrollbar-size: 12px;
+  --scrollbar-track: color-mix(in srgb, var(--primary) 12%, white 88%);
+  --scrollbar-thumb: color-mix(in srgb, var(--primary) 44%, white 56%);
+  --scrollbar-thumb-hover: var(--scrollbar-thumb);
+  --scrollbar-thumb-active: var(--scrollbar-thumb);
 }
 
 .theme-light-blue {
@@ -173,4 +180,164 @@
   html {
     @apply font-sans;
   }
+
+  /* Global modern scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  *::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--scrollbar-thumb) 0%,
+      var(--scrollbar-thumb-hover) 100%
+    );
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-thumb-active);
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
+
+  /* Opt-in class for components that need guaranteed custom scrollbars */
+  .modern-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-gutter: stable;
+  }
+
+  .modern-scrollbar::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+
+  .modern-scrollbar::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 999px;
+  }
+
+  .modern-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--scrollbar-thumb) 0%,
+      var(--scrollbar-thumb-hover) 100%
+    );
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  .modern-scrollbar::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-thumb-active);
+    background-clip: content-box;
+  }
+
+  .modern-scrollbar::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
+}
+
+/* Fallback outside Tailwind layers to ensure scrollbar styling is applied in all builds */
+.modern-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-gutter: stable;
+}
+
+.modern-scrollbar::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+.modern-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+.modern-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--scrollbar-thumb) 0%,
+    var(--scrollbar-thumb-hover) 100%
+  );
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.modern-scrollbar::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-thumb-active);
+  background-clip: content-box;
+}
+
+.modern-scrollbar::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
+}
+
+/* Hover-only variant: keep gutter stable, reveal scrollbar only on hover */
+.modern-scrollbar-hover {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  scrollbar-gutter: stable;
+}
+
+.modern-scrollbar-hover:hover {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.modern-scrollbar-hover::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+.modern-scrollbar-hover::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.modern-scrollbar-hover::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.modern-scrollbar-hover:hover::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.modern-scrollbar-hover:hover::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--scrollbar-thumb) 0%,
+    var(--scrollbar-thumb-hover) 100%
+  );
+  background-clip: content-box;
+}
+
+.modern-scrollbar-hover:hover::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-thumb-active);
+  background-clip: content-box;
+}
+
+.modern-scrollbar-hover:hover::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
 }

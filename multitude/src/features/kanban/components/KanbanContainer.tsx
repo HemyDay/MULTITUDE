@@ -232,13 +232,13 @@ export const KanbanContainer = () => {
             </>
           }
         />
-        <div className="w-full h-full flex gap-4 overflow-x-auto">
+        <div className="modern-scrollbar w-full h-full flex gap-4 overflow-x-auto">
           {columns.map((column) => {
             const Icon = column.icon;
             return (
               <div
                 key={column.id}
-                className="flex flex-col gap-4 flex-1 p-4 pr-2 bg-grey rounded-[8px]"
+                className="flex flex-col gap-4 flex-1 p-4 pr-1 bg-grey rounded-[8px]"
               >
                 <div className="flex uppercase text-base flex-row gap-2 items-center justify-start ">
                   <Icon size={16} />
