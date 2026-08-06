@@ -1,5 +1,5 @@
 import MainLayout from "@/components/layout/MainLayout";
-import { KanbanContainer } from "@/features/kanban/KanbanContainer";
+import { KanbanContainer } from "@/features/kanban/components/KanbanContainer";
 
 export default function KanbanPage() {
   return (
