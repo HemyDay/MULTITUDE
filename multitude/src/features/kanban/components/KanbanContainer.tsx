@@ -4,8 +4,10 @@ import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/composition/Button";
 import { Container } from "@/components/composition/Container";
 import { Dialog } from "@/components/composition/Dialog";
+import { useToasts } from "@/components/layout/Toasts";
 import {
   findAllTickets,
+  updateTicket,
   type TicketWithRelations,
 } from "@/features/kanban/api";
 import { KanbanColumnLane } from "./KanbanColumnLane";
@@ -42,12 +44,12 @@ type PendingMove = {
 };
 
 const columns: KanbanColumn[] = [
-  { id: "todo", icon: ListTodo, label: "TO DO" },
-  { id: "inDevelopment", icon: CodeXml, label: "IN DEVELOPMENT" },
-  { id: "toReview", icon: MessageSquareCode, label: "TO REVIEW" },
-  { id: "toTest", icon: ShieldQuestionMark, label: "TO TEST" },
-  { id: "inTest", icon: ShieldCog, label: "IN TEST" },
-  { id: "done", icon: ShieldCheck, label: "DONE" },
+  { id: "todo", icon: ListTodo, label: "A faire" },
+  { id: "inDevelopment", icon: CodeXml, label: "En développement" },
+  { id: "toReview", icon: MessageSquareCode, label: "À review" },
+  { id: "toTest", icon: ShieldQuestionMark, label: "À tester" },
+  { id: "inTest", icon: ShieldCog, label: "En test" },
+  { id: "done", icon: ShieldCheck, label: "Fini" },
 ];
 
 const columnProgression: ColumnId[] = [
@@ -69,6 +71,7 @@ const canMoveToNextColumnOnly = (
 };
 
 export const KanbanContainer = () => {
+  const { addToast } = useToasts();
   const [tickets, setTickets] = useState<TicketWithRelations[]>([]);
   const [isInvalidMoveDialogOpen, setIsInvalidMoveDialogOpen] = useState(false);
   const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
@@ -88,9 +91,23 @@ export const KanbanContainer = () => {
   }
 
   const applyMove = useCallback(
-    (itemId: number, fromColumnId: ColumnId, toColumnId: ColumnId) => {
+    async (itemId: number, fromColumnId: ColumnId, toColumnId: ColumnId) => {
+      // Find the ticket to get its title
+      const ticketTitle = `Ticket #${itemId}`;
+
+      // Find the target column label
+      const targetColumn = columns.find((c) => c.id === toColumnId);
+      const targetColumnLabel = targetColumn?.label || toColumnId;
+
+      // Create a unique groupId for this operation
+      const groupId = `move-${itemId}-${Date.now()}`;
+
+      // Optimistic update
+      let previousTickets: TicketWithRelations[] = [];
+
       setTickets((prev) => {
-        const movedTicket = prev.find((ticket) => ticket.id === itemId);
+        previousTickets = prev;
+        const movedTicket = prev.find((t) => t.id === itemId);
         if (!movedTicket) {
           return prev;
         }
@@ -99,16 +116,54 @@ export const KanbanContainer = () => {
           return prev;
         }
 
-        return prev.map((ticket) =>
-          ticket.id === itemId ? { ...ticket, column: toColumnId } : ticket,
+        return prev.map((t) =>
+          t.id === itemId ? { ...t, column: toColumnId } : t,
         );
       });
+
+      // Show loading toast
+      addToast(
+        "info",
+        "Déplacement en cours...",
+        `${ticketTitle} est en cours de déplacement`,
+        3000,
+        groupId,
+      );
+
+      // Call API to update the ticket
+      try {
+        const { error } = await updateTicket(itemId, { column: toColumnId });
+
+        if (error) {
+          throw error;
+        }
+
+        // Show success toast (replaces info toast with same groupId)
+        addToast(
+          "success",
+          "Déplacement réussi",
+          `${ticketTitle} a été déplacé vers ${targetColumnLabel}`,
+          3000,
+          groupId,
+        );
+      } catch (error) {
+        // Rollback on error
+        setTickets(previousTickets);
+        // Show error toast (replaces info toast with same groupId)
+        addToast(
+          "destructive",
+          "Erreur",
+          `Impossible de déplacer ${ticketTitle}`,
+          3000,
+          groupId,
+        );
+      }
     },
-    [],
+    [tickets, addToast],
   );
 
   const moveItem = useCallback(
-    (itemId: number, fromColumnId: ColumnId, toColumnId: ColumnId) => {
+    async (itemId: number, fromColumnId: ColumnId, toColumnId: ColumnId) => {
       if (fromColumnId === toColumnId) {
         return;
       }
@@ -119,7 +174,7 @@ export const KanbanContainer = () => {
         return;
       }
 
-      applyMove(itemId, fromColumnId, toColumnId);
+      await applyMove(itemId, fromColumnId, toColumnId);
     },
     [applyMove],
   );
@@ -129,13 +184,13 @@ export const KanbanContainer = () => {
     setIsInvalidMoveDialogOpen(false);
   }, []);
 
-  const handleForceInvalidMove = useCallback(() => {
+  const handleForceInvalidMove = useCallback(async () => {
     if (!pendingMove) {
       setIsInvalidMoveDialogOpen(false);
       return;
     }
 
-    applyMove(
+    await applyMove(
       pendingMove.itemId,
       pendingMove.fromColumnId,
       pendingMove.toColumnId,
@@ -183,7 +238,7 @@ export const KanbanContainer = () => {
             return (
               <div
                 key={column.id}
-                className="flex flex-col gap-4 flex-1 p-4 bg-grey rounded-[8px]"
+                className="flex flex-col gap-4 flex-1 p-4 pr-2 bg-grey rounded-[8px]"
               >
                 <div className="flex uppercase text-base flex-row gap-2 items-center justify-start ">
                   <Icon size={16} />

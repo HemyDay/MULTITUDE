@@ -86,7 +86,7 @@ export const KanbanColumnLane = <TColumnId extends string>({
       ref={(node) => {
         dropRef(node);
       }}
-      className="flex flex-1 flex-col gap-2 overflow-y-auto"
+      className="flex flex-1 flex-col gap-2 pr-2 overflow-y-auto"
       style={{ backgroundColor: isOver ? "#f8fafc" : "transparent" }}
     >
       {cards.map((card) => (
