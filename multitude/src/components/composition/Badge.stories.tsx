@@ -9,6 +9,7 @@ const meta = {
   args: {
     children: "Active",
     variant: "default",
+    colorHex: undefined,
   },
   argTypes: {
     variant: {
@@ -21,6 +22,10 @@ const meta = {
         "ghost",
         "link",
       ],
+    },
+    colorHex: {
+      control: "text",
+      description: "Hex color (#RGB or #RRGGBB)",
     },
   },
 } satisfies Meta<typeof Badge>;
@@ -51,5 +56,12 @@ export const Variants: Story = {
         ))}
       </div>
     );
+  },
+};
+
+export const CustomHexColor: Story = {
+  args: {
+    children: "Brand",
+    colorHex: "#0f766e",
   },
 };
