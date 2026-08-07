@@ -6,10 +6,8 @@ import { Container } from "@/components/composition/Container";
 import { Dialog } from "@/components/composition/Dialog";
 import { useToasts } from "@/components/layout/Toasts";
 import {
-  findAllTicketUsers,
   findAllTickets,
   updateTicket,
-  type TicketUser,
   type TicketWithRelations,
 } from "@/features/kanban/api";
 import { KanbanColumnLane } from "./KanbanColumnLane";
@@ -21,9 +19,11 @@ import {
   ShieldCheck,
   ShieldCog,
   ShieldQuestionMark,
+  PlusIcon,
 } from "lucide-react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { findAllTicketUsers, TicketUser } from "../api/ticket_user.api";
 
 type ColumnId =
   | "todo"
@@ -311,8 +311,13 @@ export const KanbanContainer = () => {
   }, []);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Container className="h-full w-full gap-0">
+    <Container className="h-full w-full">
+      <div className="flex flex-row gap-4 w-full">
+        <Button size={"lg"} startIcon={PlusIcon}>
+          Ajouter une tâche
+        </Button>
+      </div>
+      <DndProvider backend={HTML5Backend}>
         <Dialog
           open={isInvalidMoveDialogOpen}
           onOpenChange={(open) => {
@@ -384,7 +389,7 @@ export const KanbanContainer = () => {
             );
           })}
         </div>
-      </Container>
-    </DndProvider>
+      </DndProvider>
+    </Container>
   );
 };

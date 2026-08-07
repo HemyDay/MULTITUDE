@@ -1,9 +1,7 @@
 "use client";
 
-import {
-  type TicketUser,
-  type TicketWithRelations,
-} from "@/features/kanban/api";
+import { type TicketWithRelations } from "@/features/kanban/api";
+import { type TicketUser } from "../api/ticket_user.api";
 import { useDrag, useDrop } from "react-dnd";
 import { KanbanCard } from "./KanbanCard";
 

@@ -1,20 +1,14 @@
 "use client";
 
-import * as React from "react";
 import { Clock } from "lucide-react";
-import {
-  UiCombobox,
-  UiComboboxContent,
-  UiComboboxEmpty,
-  UiComboboxInput,
-  UiComboboxItem,
-  UiComboboxList,
-} from "@/components/ux/Combobox";
 import { Badge } from "@/components/composition/Badge";
 import { Avatar } from "@/components/composition/Avatar";
 import { Progress } from "@/components/composition/Progress";
-import { type TicketUser, type TicketWithRelations } from "../api";
-import { highlightSubstring } from "@/lib/string";
+import getPercentage from "@/lib/numbers";
+import { type TicketWithRelations } from "../api";
+import { TicketUser } from "../api/ticket_user.api";
+import { KanbanCardDetails } from "./KanbanCardDetails";
+import { KanbanCardUserSelect } from "./KanbanCardUserSelect";
 
 type KanbanCardProps = {
   card: TicketWithRelations;
@@ -36,30 +30,14 @@ export const KanbanCard = ({
   const shouldHideEstimate = ["toReview", "toTest", "inTest", "done"].includes(
     card.column ?? "",
   );
-  const [isAssignmentHovered, setIsAssignmentHovered] = React.useState(false);
-  const [isAssignmentOpen, setIsAssignmentOpen] = React.useState(false);
-  const selectedUser =
-    ticketUsers.find((user) => user.id === card.assigned_to_id) ?? null;
-  const [assignmentSearchValue, setAssignmentSearchValue] = React.useState(
-    selectedUser?.fullName ?? card.assigned_to?.fullName ?? "",
-  );
-  const normalizedAssignmentQuery = assignmentSearchValue.trim().toLowerCase();
-  const filteredTicketUsers = normalizedAssignmentQuery
-    ? ticketUsers.filter((user) =>
-        user.fullName.toLowerCase().includes(normalizedAssignmentQuery),
-      )
-    : ticketUsers;
 
   const estimate = card.estimate ?? 0;
   const remaining = card.remaining ?? 0;
-  const progressValue =
-    estimate > 0
-      ? Math.max(0, Math.min(100, ((estimate - remaining) / estimate) * 100))
-      : 0;
+  const progressValue = getPercentage(estimate, remaining);
 
-  return (
+  const cardSummary = (
     <div
-      className="group rounded-lg p-4 border-primary border flex flex-col gap-4 bg-surface"
+      className="group rounded-lg p-4 border-primary border flex flex-col gap-4 bg-surface cursor-pointer"
       style={{ opacity: isDragging ? 0.4 : 1 }}
     >
       <div className="flex flex-row justify-between">
@@ -68,7 +46,7 @@ export const KanbanCard = ({
         </Badge>
         {!shouldHideEstimate && (
           <div className="flex flex-row gap-1 text-xs items-center text-muted-foreground">
-            <span>{card.estimate ?? 0}h</span>{" "}
+            <span>{card.estimate ?? 0}h</span>
             <Clock size={12} className="stroke-muted-foreground" />
           </div>
         )}
@@ -78,98 +56,11 @@ export const KanbanCard = ({
       </div>
 
       {canEditAssignedTo ? (
-        <UiCombobox
-          key={`${card.id}-${card.assigned_to_id ?? "none"}`}
-          value={card.assigned_to_id?.toString() ?? null}
-          open={isAssignmentOpen}
-          onOpenChange={setIsAssignmentOpen}
-          onValueChange={(value) => {
-            void (async () => {
-              const assignedToId = value ? Number(value) : null;
-              await onAssignUser(card.id, assignedToId);
-              const nextUser =
-                ticketUsers.find((user) => user.id === assignedToId) ?? null;
-              setAssignmentSearchValue(nextUser?.fullName ?? "");
-            })();
-          }}
-        >
-          <div
-            className="group/assignment-combobox flex flex-row gap-1 items-center text-xs min-h-5"
-            onMouseEnter={() => {
-              setIsAssignmentHovered(true);
-            }}
-            onMouseLeave={() => {
-              setIsAssignmentHovered(false);
-            }}
-            onMouseDownCapture={(event) => {
-              event.stopPropagation();
-            }}
-          >
-            <Avatar
-              src={
-                selectedUser?.profilePicture ?? card.assigned_to?.profilePicture
-              }
-              name={selectedUser?.fullName ?? card.assigned_to?.fullName}
-              className="w-5 h-5"
-            />
-            <UiComboboxInput
-              aria-label="Affecter à un utilisateur"
-              showClear={isAssignmentHovered}
-              showTrigger={false}
-              value={assignmentSearchValue}
-              placeholder={selectedUser?.fullName ?? "Unassigned"}
-              className="h-6 px-1 w-full border-transparent hover:border-input focus-within:border-ring bg-transparent shadow-none 
-              **:data-[slot=input-group-control]:h-6 
-              **:data-[slot=input-group-control]:text-xs "
-              onFocus={() => {
-                if (
-                  !selectedUser &&
-                  !card.assigned_to_id &&
-                  !assignmentSearchValue.trim()
-                ) {
-                  setIsAssignmentOpen(true);
-                }
-              }}
-              onChange={(event) => {
-                setAssignmentSearchValue(event.target.value);
-              }}
-              onBlur={() => {
-                setIsAssignmentOpen(false);
-                setAssignmentSearchValue(
-                  selectedUser?.fullName ?? card.assigned_to?.fullName ?? "",
-                );
-              }}
-            />
-          </div>
-          <UiComboboxContent side="bottom" align="start">
-            <UiComboboxList>
-              {filteredTicketUsers.length > 0 ? (
-                filteredTicketUsers.map((user) => (
-                  <UiComboboxItem key={user.id} value={user.id.toString()}>
-                    <Avatar
-                      src={user.profilePicture}
-                      name={user.fullName}
-                      className="w-5 h-5"
-                    />
-                    <span
-                      className="text-xs"
-                      dangerouslySetInnerHTML={{
-                        __html: highlightSubstring(
-                          user.fullName,
-                          assignmentSearchValue,
-                        ),
-                      }}
-                    ></span>
-                  </UiComboboxItem>
-                ))
-              ) : (
-                <UiComboboxEmpty className="text-xs">
-                  Aucun utilisateur trouvé
-                </UiComboboxEmpty>
-              )}
-            </UiComboboxList>
-          </UiComboboxContent>
-        </UiCombobox>
+        <KanbanCardUserSelect
+          card={card}
+          ticketUsers={ticketUsers}
+          onAssignUser={onAssignUser}
+        />
       ) : (
         <div className="flex flex-row gap-2 items-center text-xs min-h-5">
           <Avatar
@@ -190,5 +81,94 @@ export const KanbanCard = ({
         </div>
       ) : null}
     </div>
+  );
+
+  return (
+    <KanbanCardDetails
+      trigger={cardSummary}
+      title={`Ticket ${card.id}`}
+      description={card.project?.name ?? "Détails du ticket"}
+    >
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <div className="text-lg font-semibold text-foreground">
+            {card.title ?? "Untitled ticket"}
+          </div>
+          {card.description ? (
+            <p className="whitespace-pre-wrap text-sm text-muted-foreground">
+              {card.description}
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Aucune description renseignée.
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-border bg-surface p-3">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              Projet
+            </div>
+            <div className="mt-1 text-sm font-medium text-foreground">
+              {card.project?.name ?? "Unassigned"}
+            </div>
+          </div>
+          <div className="rounded-lg border border-border bg-surface p-3">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              Statut
+            </div>
+            <div className="mt-1 text-sm font-medium text-foreground">
+              {card.column ?? "Unknown"}
+            </div>
+          </div>
+          <div className="rounded-lg border border-border bg-surface p-3">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              Estimation
+            </div>
+            <div className="mt-1 text-sm font-medium text-foreground">
+              {card.estimate ?? 0}h
+            </div>
+          </div>
+          <div className="rounded-lg border border-border bg-surface p-3">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              Restant
+            </div>
+            <div className="mt-1 text-sm font-medium text-foreground">
+              {card.remaining ?? 0}h
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-border bg-surface p-3">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              Auteur
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-sm text-foreground">
+              <Avatar
+                src={card.author?.profilePicture}
+                name={card.author?.fullName}
+                className="w-6 h-6"
+              />
+              <span>{card.author?.fullName ?? "Unknown"}</span>
+            </div>
+          </div>
+          <div className="rounded-lg border border-border bg-surface p-3">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">
+              Assigné à
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-sm text-foreground">
+              <Avatar
+                src={card.assigned_to?.profilePicture}
+                name={card.assigned_to?.fullName}
+                className="w-6 h-6"
+              />
+              <span>{card.assigned_to?.fullName ?? "Unassigned"}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </KanbanCardDetails>
   );
 };
