@@ -30,6 +30,7 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { findAllTicketUsers, TicketUser } from "../api/ticket_user.api";
+import { cn } from "@/lib/utils";
 
 type ColumnId =
   | "todo"
@@ -557,7 +558,12 @@ export const KanbanContainer = () => {
       const Icon = column.icon;
 
       return (
-        <div className="flex w-full flex-1 flex-col gap-4 h-full min-h-0 overflow-hidden p-4 pr-1 bg-grey rounded-[8px]">
+        <div
+          className={cn(
+            "flex w-full flex-1 flex-col gap-4 h-full min-h-0 overflow-hidden p-4 bg-grey rounded-[8px]",
+            isMobile ? "pr-4" : "pr-1",
+          )}
+        >
           <div className="flex uppercase text-base flex-row gap-2 items-center justify-start">
             <Icon size={16} />
             <span className="select-none">{column.label}</span>
