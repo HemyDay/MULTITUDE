@@ -15,6 +15,7 @@ export type KanbanColumnLaneProps<TColumnId extends string> = {
     ticketId: number,
     assignedToId: number | null,
   ) => Promise<void>;
+  onMoveToNextColumn: (ticketId: number) => Promise<void>;
 };
 
 export const KanbanColumnLane = <TColumnId extends string>({
@@ -22,11 +23,12 @@ export const KanbanColumnLane = <TColumnId extends string>({
   cards,
   ticketUsers,
   onAssignUser,
+  onMoveToNextColumn,
 }: KanbanColumnLaneProps<TColumnId>) => {
   const isMobile = useIsMobile();
 
   return (
-    <Droppable droppableId={columnId}>
+    <Droppable droppableId={columnId} isDropDisabled={isMobile}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -41,6 +43,7 @@ export const KanbanColumnLane = <TColumnId extends string>({
               key={card.id}
               draggableId={`ticket-${card.id}`}
               index={index}
+              isDragDisabled={isMobile}
             >
               {(draggableProvided, snapshot) => (
                 <div
@@ -53,6 +56,7 @@ export const KanbanColumnLane = <TColumnId extends string>({
                     card={card}
                     ticketUsers={ticketUsers}
                     onAssignUser={onAssignUser}
+                    onMoveToNextColumn={onMoveToNextColumn}
                   />
                 </div>
               )}

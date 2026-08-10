@@ -90,6 +90,13 @@ const canMoveToTargetColumn = (
   return destinationIndex === sourceIndex + 1;
 };
 
+const getNextColumnId = (columnId: ColumnId): ColumnId | null => {
+  const currentIndex = columns.findIndex((column) => column.id === columnId);
+  const nextColumn = columns[currentIndex + 1];
+
+  return nextColumn?.id ?? null;
+};
+
 const moveTickets = (
   previous: TicketWithRelations[],
   result: DropResult,
@@ -445,6 +452,104 @@ export const KanbanContainer = () => {
     }
   }, [addToast, pendingForcedMove, tickets]);
 
+  const moveTicketToNextColumn = useCallback(
+    async (ticketId: number) => {
+      const movedTicket = tickets.find((ticket) => ticket.id === ticketId);
+      if (!movedTicket?.column || !isColumnId(movedTicket.column)) {
+        return;
+      }
+
+      const sourceColumnId = movedTicket.column;
+      const destinationColumnId = getNextColumnId(sourceColumnId);
+      if (!destinationColumnId) {
+        return;
+      }
+
+      if (!movedTicket.assigned_to_id) {
+        setPendingForcedMove(null);
+        setMoveDialogMode("missingAssignee");
+        setInvalidMoveDialogOpen(true);
+        return;
+      }
+
+      const sourceTickets = tickets.filter(
+        (ticket) => ticket.column === sourceColumnId,
+      );
+      const destinationTickets = tickets.filter(
+        (ticket) => ticket.column === destinationColumnId,
+      );
+      const sourceIndex = sourceTickets.findIndex(
+        (ticket) => ticket.id === ticketId,
+      );
+      if (sourceIndex === -1) {
+        return;
+      }
+
+      const result: DropResult = {
+        draggableId: `ticket-${ticketId}`,
+        type: "DEFAULT",
+        source: {
+          droppableId: sourceColumnId,
+          index: sourceIndex,
+        },
+        destination: {
+          droppableId: destinationColumnId,
+          index: destinationTickets.length,
+        },
+        reason: "DROP",
+        mode: "FLUID",
+        combine: null,
+      };
+
+      const ticketTitle = movedTicket.title ?? `Ticket #${ticketId}`;
+      const destinationLabel =
+        columns.find((column) => column.id === destinationColumnId)?.label ??
+        destinationColumnId;
+      const groupId = `move-${ticketId}-${Date.now()}`;
+      let previousTickets: TicketWithRelations[] = [];
+
+      setTickets((prev) => {
+        previousTickets = prev;
+        return moveTickets(prev, result);
+      });
+
+      addToast(
+        "info",
+        "Déplacement en cours...",
+        `${ticketTitle} est déplacé vers ${destinationLabel}`,
+        3000,
+        groupId,
+      );
+
+      try {
+        const { error } = await updateTicket(ticketId, {
+          column: destinationColumnId,
+        });
+
+        if (error) throw error;
+
+        addToast(
+          "success",
+          "Déplacement réussi",
+          `${ticketTitle} a été déplacé vers ${destinationLabel}`,
+          3000,
+          groupId,
+        );
+      } catch (error) {
+        setTickets(previousTickets);
+
+        addToast(
+          "destructive",
+          "Erreur",
+          `Impossible de déplacer ${ticketTitle}`,
+          3000,
+          groupId,
+        );
+      }
+    },
+    [addToast, tickets],
+  );
+
   const cancelForcedMove = closeMoveDialog;
 
   const renderColumnLane = useCallback(
@@ -462,11 +567,12 @@ export const KanbanContainer = () => {
             cards={tickets.filter((ticket) => ticket.column === column.id)}
             ticketUsers={ticketUsers}
             onAssignUser={assignUser}
+            onMoveToNextColumn={moveTicketToNextColumn}
           />
         </div>
       );
     },
-    [assignUser, ticketUsers, tickets],
+    [assignUser, moveTicketToNextColumn, ticketUsers, tickets],
   );
 
   return (

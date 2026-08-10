@@ -9,7 +9,10 @@ type KanbanCardDetailsProps = {
   description?: React.ReactNode;
   children: React.ReactNode;
   contentClassName?: string;
-};
+} & Omit<
+  React.ComponentProps<typeof Dialog>,
+  "trigger" | "title" | "description" | "children" | "contentClassName"
+>;
 
 export const KanbanCardDetails = ({
   trigger,
@@ -17,9 +20,11 @@ export const KanbanCardDetails = ({
   description,
   children,
   contentClassName,
+  ...dialogProps
 }: KanbanCardDetailsProps) => {
   return (
     <Dialog
+      {...dialogProps}
       contentClassName={contentClassName ?? "sm:max-w-2xl"}
       title={title}
       description={description}
