@@ -43,7 +43,7 @@ function UiDialogContent({
 }: React.ComponentProps<typeof LightDialogContent>) {
   return (
     <LightDialogContent
-      className={cn(uxSurfaceStyles.root, className)}
+      className={cn(uxSurfaceStyles.root, "sm:max-w-xl", className)}
       {...props}
     />
   );
