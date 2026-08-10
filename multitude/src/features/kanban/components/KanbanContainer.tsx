@@ -1,8 +1,14 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { Button } from "@/components/composition/Button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/composition/Carousel";
 import { Container } from "@/components/composition/Container";
 import { Dialog } from "@/components/composition/Dialog";
 import { useToasts } from "@/components/layout/Toasts";
@@ -11,6 +17,7 @@ import {
   updateTicket,
   type TicketWithRelations,
 } from "@/features/kanban/api";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { KanbanColumnLane } from "./KanbanColumnLane";
 import {
   CodeXml,
@@ -145,9 +152,12 @@ const moveTickets = (
 };
 
 export const KanbanContainer = () => {
+  const isMobile = useIsMobile();
   const { addToast } = useToasts();
   const [tickets, setTickets] = useState<TicketWithRelations[]>([]);
   const [ticketUsers, setTicketUsers] = useState<TicketUser[]>([]);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [activeColumnIndex, setActiveColumnIndex] = useState(0);
   const [invalidMoveDialogOpen, setInvalidMoveDialogOpen] = useState(false);
   const [moveDialogMode, setMoveDialogMode] = useState<MoveDialogMode | null>(
     null,
@@ -182,6 +192,23 @@ export const KanbanContainer = () => {
         console.error("[KanbanContainer] Failed to load ticket users:", error);
       });
   }
+
+  useEffect(() => {
+    if (!carouselApi || !isMobile) return;
+
+    const syncActiveIndex = () => {
+      setActiveColumnIndex(carouselApi.selectedScrollSnap());
+    };
+
+    syncActiveIndex();
+    carouselApi.on("select", syncActiveIndex);
+    carouselApi.on("reInit", syncActiveIndex);
+
+    return () => {
+      carouselApi.off("select", syncActiveIndex);
+      carouselApi.off("reInit", syncActiveIndex);
+    };
+  }, [carouselApi, isMobile]);
 
   const assignUser = useCallback(
     async (itemId: number, assignedToId: number | null) => {
@@ -420,8 +447,30 @@ export const KanbanContainer = () => {
 
   const cancelForcedMove = closeMoveDialog;
 
+  const renderColumnLane = useCallback(
+    (column: KanbanColumn) => {
+      const Icon = column.icon;
+
+      return (
+        <div className="flex w-full flex-1 flex-col gap-4 h-full min-h-0 overflow-hidden p-4 pr-1 bg-grey rounded-[8px]">
+          <div className="flex uppercase text-base flex-row gap-2 items-center justify-start">
+            <Icon size={16} />
+            <span className="select-none">{column.label}</span>
+          </div>
+          <KanbanColumnLane
+            columnId={column.id}
+            cards={tickets.filter((ticket) => ticket.column === column.id)}
+            ticketUsers={ticketUsers}
+            onAssignUser={assignUser}
+          />
+        </div>
+      );
+    },
+    [assignUser, ticketUsers, tickets],
+  );
+
   return (
-    <Container className="h-full w-full">
+    <Container className="h-full min-h-0 w-full items-stretch overflow-hidden">
       <Dialog
         open={invalidMoveDialogOpen}
         onOpenChange={(open) => {
@@ -458,37 +507,70 @@ export const KanbanContainer = () => {
         }
       />
 
-      <div className="flex flex-row gap-4 w-full">
+      <div className="hidden md:flex flex-row gap-4 w-full">
         <Button size={"lg"} startIcon={PlusIcon}>
           Ajouter une tâche
         </Button>
       </div>
 
       <DragDropContext onDragEnd={(result) => void handleDragEnd(result)}>
-        <div className="modern-scrollbar w-full h-full flex gap-4 overflow-x-auto">
-          {columns.map((column) => {
-            const Icon = column.icon;
-            return (
-              <div
-                key={column.id}
-                className="flex flex-col gap-4 flex-1 p-4 pr-1 bg-grey rounded-[8px]"
+        {isMobile ? (
+          <div className="w-full min-h-0 flex flex-1 flex-col overflow-hidden">
+            <div className="relative w-full min-h-0 flex-1">
+              <Carousel
+                className="w-full h-full min-h-0 touch-pan-x *:data-[slot=carousel-content]:h-full"
+                setApi={setCarouselApi}
               >
-                <div className="flex uppercase text-base flex-row gap-2 items-center justify-start ">
-                  <Icon size={16} />
-                  <span className="select-none">{column.label}</span>
+                <CarouselContent className="ml-0 h-full min-h-0">
+                  {columns.map((column) => (
+                    <CarouselItem
+                      key={column.id}
+                      className="pl-0 h-full min-h-0 flex"
+                    >
+                      {renderColumnLane(column)}
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+
+              <div className="absolute inset-x-0 bottom-2 z-10 flex items-center justify-center">
+                <div className="inline-flex items-center gap-2 rounded-full bg-surface/90 px-3 py-1.5 shadow-sm backdrop-blur-sm">
+                  {columns.map((column, index) => {
+                    const isActive = index === activeColumnIndex;
+
+                    return (
+                      <button
+                        key={column.id}
+                        type="button"
+                        aria-label={`Aller à la colonne ${column.label}`}
+                        aria-current={isActive}
+                        onClick={() => carouselApi?.scrollTo(index)}
+                        className={`h-2.5 rounded-full ring-1 ring-foreground/20 transition-all ${
+                          isActive
+                            ? "w-6 bg-primary"
+                            : "w-2.5 bg-muted-foreground/45 hover:bg-muted-foreground/70"
+                        }`}
+                      />
+                    );
+                  })}
                 </div>
-                <KanbanColumnLane
-                  columnId={column.id}
-                  cards={tickets.filter(
-                    (ticket) => ticket.column === column.id,
-                  )}
-                  ticketUsers={ticketUsers}
-                  onAssignUser={assignUser}
-                />
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
+        ) : (
+          <div
+            className="w-full h-full min-h-0 grid gap-4"
+            style={{
+              gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
+            }}
+          >
+            {columns.map((column) => (
+              <div key={column.id} className="min-w-0 h-full min-h-0">
+                {renderColumnLane(column)}
+              </div>
+            ))}
+          </div>
+        )}
       </DragDropContext>
     </Container>
   );

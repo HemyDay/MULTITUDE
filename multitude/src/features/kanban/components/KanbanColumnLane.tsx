@@ -4,6 +4,8 @@ import { type TicketWithRelations } from "@/features/kanban/api";
 import { type TicketUser } from "../api/ticket_user.api";
 import { KanbanCard } from "./KanbanCard";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export type KanbanColumnLaneProps<TColumnId extends string> = {
   columnId: TColumnId;
@@ -21,13 +23,18 @@ export const KanbanColumnLane = <TColumnId extends string>({
   ticketUsers,
   onAssignUser,
 }: KanbanColumnLaneProps<TColumnId>) => {
+  const isMobile = useIsMobile();
+
   return (
     <Droppable droppableId={columnId}>
       {(provided) => (
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="modern-scrollbar-hover flex flex-1 flex-col gap-2 pr-1 overflow-y-auto"
+          className={cn(
+            "modern-scrollbar-hover flex flex-1 min-h-0 flex-col gap-2 overflow-y-auto overscroll-y-contain touch-pan-y",
+            !isMobile ? " pr-1 " : "",
+          )}
         >
           {cards.map((card, index) => (
             <Draggable
