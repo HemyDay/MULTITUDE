@@ -12,7 +12,6 @@ import { KanbanCardUserSelect } from "./KanbanCardUserSelect";
 
 type KanbanCardProps = {
   card: TicketWithRelations;
-  isDragging?: boolean;
   ticketUsers: TicketUser[];
   onAssignUser: (
     ticketId: number,
@@ -22,7 +21,6 @@ type KanbanCardProps = {
 
 export const KanbanCard = ({
   card,
-  isDragging = false,
   ticketUsers,
   onAssignUser,
 }: KanbanCardProps) => {
@@ -36,10 +34,7 @@ export const KanbanCard = ({
   const progressValue = getPercentage(estimate, remaining);
 
   const cardSummary = (
-    <div
-      className="group rounded-lg p-4 border-primary border flex flex-col gap-4 bg-surface cursor-pointer"
-      style={{ opacity: isDragging ? 0.4 : 1 }}
-    >
+    <div className="group rounded-lg p-4 border-primary border flex flex-col gap-4 bg-surface cursor-pointer">
       <div className="flex flex-row justify-between">
         <Badge colorHex={card.project?.color || "#FC6E51"} className="text-xs">
           {card.project?.name}
