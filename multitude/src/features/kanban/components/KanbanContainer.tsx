@@ -14,6 +14,7 @@ import { Dialog } from "@/components/composition/Dialog";
 import { useToasts } from "@/components/layout/Toasts";
 import {
   findAllTickets,
+  deleteTicket,
   updateTicket,
   type TicketWithRelations,
 } from "@/features/kanban/api";
@@ -551,6 +552,42 @@ export const KanbanContainer = () => {
     [addToast, tickets],
   );
 
+  const removeTicket = useCallback(
+    async (ticketId: number) => {
+      const ticket = tickets.find(
+        (currentTicket) => currentTicket.id === ticketId,
+      );
+      if (!ticket) return;
+
+      setTickets((previousTickets) =>
+        previousTickets.filter(
+          (currentTicket) => currentTicket.id !== ticketId,
+        ),
+      );
+
+      try {
+        const { error } = await deleteTicket(ticketId);
+        if (error) throw error;
+
+        addToast(
+          "success",
+          "Suppression réussie",
+          `${ticket.title ?? `Ticket #${ticketId}`} a été supprimé`,
+          3000,
+        );
+      } catch (error) {
+        setTickets((previousTickets) => [ticket, ...previousTickets]);
+        addToast(
+          "destructive",
+          "Erreur",
+          `Impossible de supprimer ${ticket.title ?? `Ticket #${ticketId}`}`,
+          3000,
+        );
+      }
+    },
+    [addToast, tickets],
+  );
+
   const cancelForcedMove = closeMoveDialog;
 
   const renderColumnLane = useCallback(
@@ -574,11 +611,12 @@ export const KanbanContainer = () => {
             ticketUsers={ticketUsers}
             onAssignUser={assignUser}
             onMoveToNextColumn={moveTicketToNextColumn}
+            onDeleteTicket={removeTicket}
           />
         </div>
       );
     },
-    [assignUser, moveTicketToNextColumn, ticketUsers, tickets],
+    [assignUser, moveTicketToNextColumn, removeTicket, ticketUsers, tickets],
   );
 
   return (
@@ -602,16 +640,27 @@ export const KanbanContainer = () => {
         variantStyle="destructive"
         footer={
           moveDialogMode === "missingAssignee" ? (
-            <Button onClick={closeMoveDialog}>Compris</Button>
+            <Button
+              className="flex-1 w-full"
+              variant="outline"
+              onClick={closeMoveDialog}
+            >
+              Compris
+            </Button>
           ) : (
             <>
               <Button
                 variant="outline"
+                className="flex-1 w-full"
                 onClick={() => void confirmForcedMove()}
               >
                 Déplacer quand même
               </Button>
-              <Button variant="destructive" onClick={cancelForcedMove}>
+              <Button
+                variant="destructive"
+                className="flex-1 w-full"
+                onClick={cancelForcedMove}
+              >
                 Annuler le déplacement
               </Button>
             </>

@@ -16,6 +16,7 @@ export type KanbanColumnLaneProps<TColumnId extends string> = {
     assignedToId: number | null,
   ) => Promise<void>;
   onMoveToNextColumn: (ticketId: number) => Promise<void>;
+  onDeleteTicket: (ticketId: number) => Promise<void>;
 };
 
 export const KanbanColumnLane = <TColumnId extends string>({
@@ -24,6 +25,7 @@ export const KanbanColumnLane = <TColumnId extends string>({
   ticketUsers,
   onAssignUser,
   onMoveToNextColumn,
+  onDeleteTicket,
 }: KanbanColumnLaneProps<TColumnId>) => {
   const isMobile = useIsMobile();
 
@@ -57,6 +59,7 @@ export const KanbanColumnLane = <TColumnId extends string>({
                     ticketUsers={ticketUsers}
                     onAssignUser={onAssignUser}
                     onMoveToNextColumn={onMoveToNextColumn}
+                    onDeleteTicket={onDeleteTicket}
                   />
                 </div>
               )}

@@ -6,6 +6,7 @@ import { Button } from "@/components/composition/Button";
 import { Badge } from "@/components/composition/Badge";
 import { Avatar } from "@/components/composition/Avatar";
 import { Progress } from "@/components/composition/Progress";
+import { Dialog } from "@/components/composition/Dialog";
 import getPercentage from "@/lib/numbers";
 import { type TicketWithRelations } from "../api";
 import { TicketUser } from "../api/ticket_user.api";
@@ -22,6 +23,7 @@ type KanbanCardProps = {
     assignedToId: number | null,
   ) => Promise<void>;
   onMoveToNextColumn: (ticketId: number) => Promise<void>;
+  onDeleteTicket: (ticketId: number) => Promise<void>;
 };
 
 export const KanbanCard = ({
@@ -29,11 +31,13 @@ export const KanbanCard = ({
   ticketUsers,
   onAssignUser,
   onMoveToNextColumn,
+  onDeleteTicket,
 }: KanbanCardProps) => {
   const isMobile = useIsMobile();
   const mobileCardRef = React.useRef<HTMLDivElement | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
   const [isActionsOpen, setIsActionsOpen] = React.useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const canEditAssignedTo = card.column === "todo";
   const shouldHideEstimate = ["toReview", "toTest", "inTest", "done"].includes(
     card.column ?? "",
@@ -95,6 +99,11 @@ export const KanbanCard = ({
     event.stopPropagation();
     setIsActionsOpen(false);
     void onMoveToNextColumn(card.id);
+  };
+
+  const handleConfirmDelete = () => {
+    setIsDeleteDialogOpen(false);
+    void onDeleteTicket(card.id);
   };
 
   const cardSummary = (
@@ -285,6 +294,8 @@ export const KanbanCard = ({
                   className="aspect-square p-4 shadow-lg"
                   onClick={(event) => {
                     event.stopPropagation();
+                    setIsActionsOpen(false);
+                    setIsDeleteDialogOpen(true);
                   }}
                 >
                   <Trash2 size={20} />
@@ -304,6 +315,34 @@ export const KanbanCard = ({
           ) : null}
         </div>
       ) : null}
+
+      <Dialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        variantStyle="destructive"
+        title="Supprimer le ticket ?"
+        description={`La suppression de « ${card.title ?? `Ticket #${card.id}`} » est définitive.`}
+        footer={
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1 w-full"
+              onClick={handleConfirmDelete}
+            >
+              Confirmer la suppression
+            </Button>
+            <Button
+              type="button"
+              className="flex-1 w-full"
+              variant="destructive"
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              Annuler la suppression
+            </Button>
+          </>
+        }
+      />
 
       <KanbanCardDetails
         trigger={isMobile ? undefined : cardSummary}

@@ -85,7 +85,7 @@ function Dialog({
         {children}
         {footer ? (
           <UiDialogFooter
-            className={footerClassName}
+            className={cn("flex-col sm:flex-row", footerClassName)}
             showCloseButton={showFooterCloseButton}
           >
             {footer}
