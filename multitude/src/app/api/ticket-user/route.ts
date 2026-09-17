@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import type { TicketUser } from "@/features/kanban/api";
+type TicketUser = {
+  id: string;
+  fullName: string;
+  profilePicture: string | null;
+};
 
 const SUPABASE_REST_URL =
   "https://inxlerxhvevovxmvjoah.supabase.co/rest/v1/ticket_user";

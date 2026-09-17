@@ -24,6 +24,7 @@ import {
   CodeXml,
   type LucideIcon,
   ListTodo,
+  LoaderCircle,
   MessageSquareCode,
   ShieldCheck,
   ShieldCog,
@@ -31,6 +32,7 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { findAllTicketUsers, TicketUser } from "../api/ticket_user.api";
+import { ErrorMessage } from "@/features/errors/ErrorMessage";
 import { cn } from "@/lib/utils";
 
 type ColumnId =
@@ -164,6 +166,8 @@ export const KanbanContainer = () => {
   const isMobile = useIsMobile();
   const { addToast } = useToasts();
   const [tickets, setTickets] = useState<TicketWithRelations[]>([]);
+  const [isLoadingTickets, setIsLoadingTickets] = useState(true);
+  const [hasTicketsLoadError, setHasTicketsLoadError] = useState(false);
   const [ticketUsers, setTicketUsers] = useState<TicketUser[]>([]);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [activeColumnIndex, setActiveColumnIndex] = useState(0);
@@ -186,6 +190,10 @@ export const KanbanContainer = () => {
       })
       .catch((error) => {
         console.error("[KanbanContainer] Failed to load tickets:", error);
+        setHasTicketsLoadError(true);
+      })
+      .finally(() => {
+        setIsLoadingTickets(false);
       });
   }
 
@@ -621,118 +629,132 @@ export const KanbanContainer = () => {
 
   return (
     <Container className="h-full min-h-0 w-full items-stretch overflow-hidden">
-      <Dialog
-        open={invalidMoveDialogOpen}
-        onOpenChange={(open) => {
-          if (!open) {
-            closeMoveDialog();
-            return;
-          }
+      {isLoadingTickets ? (
+        <div
+          role="status"
+          aria-label="Chargement des tickets"
+          className="flex w-full flex-1 items-center justify-center"
+        >
+          <LoaderCircle className="size-16 animate-spin text-primary" />
+        </div>
+      ) : hasTicketsLoadError ? (
+        <ErrorMessage code={500} />
+      ) : (
+        <>
+          <Dialog
+            open={invalidMoveDialogOpen}
+            onOpenChange={(open) => {
+              if (!open) {
+                closeMoveDialog();
+                return;
+              }
 
-          setInvalidMoveDialogOpen(true);
-        }}
-        title="Déplacement invalide"
-        description={
-          moveDialogMode === "missingAssignee"
-            ? "Veuillez assigner ce ticket à un utilisateur"
-            : "Souhaitez vous déplacer quand même le ticket ?"
-        }
-        variantStyle="destructive"
-        footer={
-          moveDialogMode === "missingAssignee" ? (
-            <Button
-              className="flex-1 w-full"
-              variant="outline"
-              onClick={closeMoveDialog}
-            >
-              Compris
+              setInvalidMoveDialogOpen(true);
+            }}
+            title="Déplacement invalide"
+            description={
+              moveDialogMode === "missingAssignee"
+                ? "Veuillez assigner ce ticket à un utilisateur"
+                : "Souhaitez vous déplacer quand même le ticket ?"
+            }
+            variantStyle="destructive"
+            footer={
+              moveDialogMode === "missingAssignee" ? (
+                <Button
+                  className="flex-1 w-full"
+                  variant="outline"
+                  onClick={closeMoveDialog}
+                >
+                  Compris
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    className="flex-1 w-full"
+                    onClick={() => void confirmForcedMove()}
+                  >
+                    Déplacer quand même
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="flex-1 w-full"
+                    onClick={cancelForcedMove}
+                  >
+                    Annuler le déplacement
+                  </Button>
+                </>
+              )
+            }
+          />
+
+          <div className="hidden md:flex flex-row gap-4 w-full">
+            <Button size={"lg"} startIcon={PlusIcon}>
+              Ajouter une tâche
             </Button>
-          ) : (
-            <>
-              <Button
-                variant="outline"
-                className="flex-1 w-full"
-                onClick={() => void confirmForcedMove()}
-              >
-                Déplacer quand même
-              </Button>
-              <Button
-                variant="destructive"
-                className="flex-1 w-full"
-                onClick={cancelForcedMove}
-              >
-                Annuler le déplacement
-              </Button>
-            </>
-          )
-        }
-      />
+          </div>
 
-      <div className="hidden md:flex flex-row gap-4 w-full">
-        <Button size={"lg"} startIcon={PlusIcon}>
-          Ajouter une tâche
-        </Button>
-      </div>
+          <DragDropContext onDragEnd={(result) => void handleDragEnd(result)}>
+            {isMobile ? (
+              <div className="w-full min-h-0 flex flex-1 flex-col overflow-hidden">
+                <div className="relative w-full min-h-0 flex-1">
+                  <Carousel
+                    className="w-full h-full min-h-0 touch-pan-x *:data-[slot=carousel-content]:h-full"
+                    setApi={setCarouselApi}
+                  >
+                    <CarouselContent className="ml-0 h-full min-h-0">
+                      {columns.map((column) => (
+                        <CarouselItem
+                          key={column.id}
+                          className="pl-0 h-full min-h-0 flex"
+                        >
+                          {renderColumnLane(column)}
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
 
-      <DragDropContext onDragEnd={(result) => void handleDragEnd(result)}>
-        {isMobile ? (
-          <div className="w-full min-h-0 flex flex-1 flex-col overflow-hidden">
-            <div className="relative w-full min-h-0 flex-1">
-              <Carousel
-                className="w-full h-full min-h-0 touch-pan-x *:data-[slot=carousel-content]:h-full"
-                setApi={setCarouselApi}
-              >
-                <CarouselContent className="ml-0 h-full min-h-0">
-                  {columns.map((column) => (
-                    <CarouselItem
-                      key={column.id}
-                      className="pl-0 h-full min-h-0 flex"
-                    >
-                      {renderColumnLane(column)}
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
+                  <div className="absolute inset-x-0 bottom-2 z-10 flex items-center justify-center">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-surface/90 px-3 py-1.5 shadow-sm backdrop-blur-sm">
+                      {columns.map((column, index) => {
+                        const isActive = index === activeColumnIndex;
 
-              <div className="absolute inset-x-0 bottom-2 z-10 flex items-center justify-center">
-                <div className="inline-flex items-center gap-2 rounded-full bg-surface/90 px-3 py-1.5 shadow-sm backdrop-blur-sm">
-                  {columns.map((column, index) => {
-                    const isActive = index === activeColumnIndex;
-
-                    return (
-                      <button
-                        key={column.id}
-                        type="button"
-                        aria-label={`Aller à la colonne ${column.label}`}
-                        aria-current={isActive}
-                        onClick={() => carouselApi?.scrollTo(index)}
-                        className={`h-2.5 rounded-full ring-1 ring-foreground/20 transition-all ${
-                          isActive
-                            ? "w-6 bg-primary"
-                            : "w-2.5 bg-muted-foreground/45 hover:bg-muted-foreground/70"
-                        }`}
-                      />
-                    );
-                  })}
+                        return (
+                          <button
+                            key={column.id}
+                            type="button"
+                            aria-label={`Aller à la colonne ${column.label}`}
+                            aria-current={isActive}
+                            onClick={() => carouselApi?.scrollTo(index)}
+                            className={`h-2.5 rounded-full ring-1 ring-foreground/20 transition-all ${
+                              isActive
+                                ? "w-6 bg-primary"
+                                : "w-2.5 bg-muted-foreground/45 hover:bg-muted-foreground/70"
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          <div
-            className="w-full h-full min-h-0 grid gap-4"
-            style={{
-              gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
-            }}
-          >
-            {columns.map((column) => (
-              <div key={column.id} className="min-w-0 h-full min-h-0">
-                {renderColumnLane(column)}
+            ) : (
+              <div
+                className="w-full h-full min-h-0 grid gap-4"
+                style={{
+                  gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
+                }}
+              >
+                {columns.map((column) => (
+                  <div key={column.id} className="min-w-0 h-full min-h-0">
+                    {renderColumnLane(column)}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
-      </DragDropContext>
+            )}
+          </DragDropContext>
+        </>
+      )}
     </Container>
   );
 };
