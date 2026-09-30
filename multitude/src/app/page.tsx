@@ -1,9 +1,5 @@
-import Image from "next/image";
+import LandingPage from "@/features/landingPage/LandingPage";
 
 export default function Home() {
-  return (
-    <div>
-      <div className="text-primary">Hello World</div>
-    </div>
-  );
+  return <LandingPage />;
 }

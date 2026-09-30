@@ -255,6 +255,14 @@
   }
 }
 
+.landing-page {
+  font-family: var(--font-geist-mono);
+}
+
+.landing-page :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-newsreader);
+}
+
 /* Fallback outside Tailwind layers to ensure scrollbar styling is applied in all builds */
 .modern-scrollbar {
   scrollbar-width: thin;
