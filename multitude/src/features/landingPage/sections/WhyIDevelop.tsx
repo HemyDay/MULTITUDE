@@ -2,7 +2,7 @@ import Section from "../Section";
 
 export default function WhyIDevelop() {
   return (
-    <Section id="why-i-develop" number={3} title="Pourquoi je développe">
+    <Section id="why-i-develop" number={2} title="Pourquoi je développe">
       <div className="flex flex-col gap-4">
         <p>
           Je n’ai pas commencé par développer des outils. J’ai commencé par

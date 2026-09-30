@@ -2,7 +2,7 @@ import Section from "../Section";
 
 export default function MyJourney() {
   return (
-    <Section id="my-journey" number={2} title="Mon parcours">
+    <Section id="my-journey" number={1} title="Mon parcours">
       <div className="flex flex-col gap-4">
         <p>
           Mon parcours a d’abord été tourné vers l’éducation et
@@ -14,7 +14,7 @@ export default function MyJourney() {
         </p>
         <p>
           J’ai ensuite choisi de me reconvertir dans le développement web et
-          obtenu en 2024 un titre professionnel de développeur web et web
+          obtenu en 2023 un titre professionnel de développeur web et web
           mobile. Peu après, un hackathon organisé avec France Travail m’a
           permis de rencontrer l’entreprise qui m’a recrutée et de commencer mon
           parcours professionnel dans le développement front-end.

@@ -2,7 +2,7 @@ import Section from "../Section";
 
 export default function HowIUseAI() {
   return (
-    <Section id="how-i-use-ai" number={7} title="Comment j’utilise l’IA">
+    <Section id="how-i-use-ai" number={6} title="Comment j’utilise l’IA">
       <div className="flex flex-col gap-4">
         <p>
           J’utilise l’IA comme un outil de réflexion, d’organisation et

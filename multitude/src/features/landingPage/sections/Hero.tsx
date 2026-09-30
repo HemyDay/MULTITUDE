@@ -2,7 +2,7 @@ import Section from "../Section";
 
 export default function Hero() {
   return (
-    <Section id="hero" number={1} title="Hero" noTitle>
+    <Section id="hero" number={0} title="Hero" noTitle>
       <div className="flex flex-row justify-between border-t-2 border-b-2">
         <div className="uppercase">MONTPELLIER · 2026</div>
         <div className="uppercase">Présentation</div>
