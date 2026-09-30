@@ -8,7 +8,7 @@ import HowIUseAI from "./sections/HowIUseAI";
 
 export default function LandingPage() {
   return (
-    <main className="landing-page gap-16 flex flex-col py-28 max-w-5xl mx-auto px-8">
+    <main className="landing-page gap-16 flex flex-col md:py-28 py-8 max-w-5xl mx-auto px-8">
       <Hero />
       <MyJourney />
       <WhyIDevelop />
