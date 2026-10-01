@@ -196,6 +196,66 @@ const projects = [
 export default function MyMultitudeProject() {
   return (
     <Section id="my-multitude-project" number={7} title="Mon projet MULTITUDE">
+      <div className="flex flex-col gap-4">
+        <p>
+          <strong>Multitude</strong> est un projet personnel que je développe
+          sur mon temps libre pour enrichir mon portfolio, expérimenter et
+          continuer à apprendre.
+        </p>
+        <p>
+          Mon expérience professionnelle s’étant jusqu’ici principalement
+          construite autour d’un même produit, je souhaitais pouvoir présenter
+          plus largement mes compétences sans exposer le code ou les projets de
+          mon entreprise. Multitude me permet ainsi d’explorer une grande
+          diversité de problématiques front-end à travers plusieurs interfaces,
+          chacune pensée pour répondre à{" "}
+          <strong>un besoin concret et à un public spécifique</strong>.
+        </p>
+        <p>
+          Chaque projet est conçu comme une véritable expérience utilisateur :{" "}
+          <strong>
+            responsive lorsque le contexte s’y prête, accessible et attentive
+            aux détails d’UX
+          </strong>
+          , avec une attention particulière portée aux différents états de
+          l’interface, aux erreurs, aux chargements, aux interactions et aux
+          feedbacks utilisateur.
+        </p>
+        <p>
+          L’ensemble repose sur un{" "}
+          <strong>design system commun, robuste et réutilisable</strong>. Les
+          mêmes composants sont utilisés à travers les différents projets et
+          s’adaptent à leur univers, notamment grâce à une couleur principale
+          propre à chacun. L’objectif est de construire un système cohérent,
+          mais suffisamment flexible pour fonctionner dans des contextes et des
+          usages très différents.
+        </p>
+        <p>
+          C’est également un{" "}
+          <strong>terrain d’expérimentation et d’apprentissage</strong> : chaque
+          nouvelle interface est l’occasion de travailler des problématiques,
+          des outils ou des concepts différents et de sortir de ce que je
+          rencontre habituellement dans mon environnement professionnel.
+        </p>
+        <p>
+          Enfin, Multitude est un projet volontairement évolutif. Je suis{" "}
+          <strong>
+            ouverte aux suggestions de développeurs expérimentés, de recruteurs
+            ou de professionnels du produit
+          </strong>
+          : nouveaux types d’interfaces, problématiques intéressantes à résoudre
+          ou compétences particulièrement pertinentes à démontrer. L’objectif
+          est de continuer à enrichir le projet avec des cas d’usage variés qui
+          me permettent de progresser tout en donnant une vision plus complète
+          de mes compétences.
+        </p>
+      </div>
+
+      <div className="flex items-center gap-4 text-center my-4 text-sm uppercase">
+        <span aria-hidden="true" className="h-px flex-1 bg-border" />
+        <span>Projets en cours de création</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border" />
+      </div>
       <Accordion type="multiple" className="gap-8">
         {projects.map(({ value, title, Icon, description }) => (
           <AccordionItem
