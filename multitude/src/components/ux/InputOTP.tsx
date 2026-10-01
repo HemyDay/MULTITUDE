@@ -9,5 +9,3 @@ export const InputOTP = React.forwardRef<
   return <LightInputOTP ref={ref} {...props} />;
 });
 InputOTP.displayName = "InputOTP";
-
-export { InputOTP };

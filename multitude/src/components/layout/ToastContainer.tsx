@@ -37,7 +37,7 @@ function ToastItem({
   toast: ToastItem;
   onRemove: () => void;
 }) {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const duration = toast.duration || 3000;
