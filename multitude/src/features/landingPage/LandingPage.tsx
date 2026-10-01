@@ -5,6 +5,8 @@ import CurrentProfessionalExperience from "./sections/CurrentProfessionalExperie
 import MySkills from "./sections/MySkills";
 import HowIWork from "./sections/HowIWork";
 import HowIUseAI from "./sections/HowIUseAI";
+import MyMultitudeProject from "./sections/MyMultitudeProject";
+import Contact from "./sections/Contact";
 
 export default function LandingPage() {
   return (
@@ -16,6 +18,8 @@ export default function LandingPage() {
       <MySkills />
       <HowIWork />
       <HowIUseAI />
+      <MyMultitudeProject />
+      <Contact />
     </main>
   );
 }
