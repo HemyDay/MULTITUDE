@@ -13,8 +13,17 @@ function Button({
   endIcon: EndIcon,
   children,
   className,
+  asChild,
   ...props
 }: ButtonProps) {
+  if (asChild) {
+    return (
+      <UiButton asChild className={className} {...props}>
+        {children}
+      </UiButton>
+    );
+  }
+
   return (
     <UiButton className={className} {...props}>
       {StartIcon ? <StartIcon data-icon="inline-start" /> : null}
