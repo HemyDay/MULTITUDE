@@ -9,7 +9,7 @@ export default function WhyIDevelop() {
           travailler avec les personnes qui pourraient avoir besoin de ces
           outils. Mon parcours dans l’éducation m’a appris à partir des besoins,
           des difficultés et des façons de comprendre de chacun. Aujourd’hui,
-          j’essaie d’appliquer la même logique au développement : comprendre
+          j’essaie d’appliquer la même logique au développement : comprendre
           avant de construire.
         </p>
         <p>

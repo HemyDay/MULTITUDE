@@ -257,10 +257,25 @@
 
 .landing-page {
   font-family: var(--font-geist-mono);
+  line-height: 1.65;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.landing-page section[id] {
+  scroll-margin-block-start: 2.5rem;
 }
 
 .landing-page :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-newsreader);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Fallback outside Tailwind layers to ensure scrollbar styling is applied in all builds */

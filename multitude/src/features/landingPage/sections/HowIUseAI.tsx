@@ -15,7 +15,7 @@ export default function HowIUseAI() {
           limites ou à enrichir mes scénarios de tests.
         </p>
         <p>
-          Je m’en sers aussi pour mieux structurer mon travail : découper une
+          Je m’en sers aussi pour mieux structurer mon travail : découper une
           fonctionnalité en tâches plus petites, clarifier un plan d’action,
           prioriser ce que j’ai à faire ou reformuler un besoin lorsque celui-ci
           est encore flou.

@@ -26,17 +26,17 @@ const contactLinks = [
 
 export default function Contact() {
   return (
-    <Section id="contact" number={8} title="Et si on échangeait ?">
+    <Section id="contact" number={8} title="Et si on échangeait ?">
       <div className="flex flex-col items-start gap-6">
         <div className="flex flex-col gap-2">
-          <p>Mon profil vous intéresse ? Vous aimeriez me faire un retour ?</p>
+          <p>Mon profil vous intéresse ? Vous aimeriez me faire un retour ?</p>
           <p>
             Qu’est-ce qu’il vous manquerait pour m’imaginer intégrer votre
-            entreprise ? Qu’aimeriez-vous savoir sur un futur candidat ?
+            entreprise ? Qu’aimeriez-vous savoir sur un futur candidat ?
           </p>
           <p>
-            Lequel des projets MULTITUDE vous intrigue le plus ? Lequel vous
-            semble le plus utile ?
+            Lequel des projets MULTITUDE vous intrigue le plus ? Lequel vous
+            semble le plus utile ?
           </p>
         </div>
         <div className="flex w-full flex-col gap-3">

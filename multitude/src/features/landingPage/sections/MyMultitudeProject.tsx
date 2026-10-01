@@ -24,13 +24,13 @@ const projects = [
       <>
         <p>
           Destiné aux <strong>étudiants</strong>, ce tableau de bord centralise
-          les informations importantes de leur quotidien universitaire : cours,
+          les informations importantes de leur quotidien universitaire : cours,
           échéances, résultats et événements à venir. Il répond au besoin
           d’avoir une <strong>vue d’ensemble claire et rapide</strong> depuis
           une seule interface.
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> responsive design,
+          <strong>Compétences mises en pratique :</strong> responsive design,
           composants réutilisables, data visualisation, graphiques, gestion des
           états de chargement, consommation d’API et organisation d’une
           interface riche en informations.
@@ -52,7 +52,7 @@ const projects = [
           <strong>éviter les conflits de réservation</strong>.
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> manipulation de dates
+          <strong>Compétences mises en pratique :</strong> manipulation de dates
           et horaires, calendrier interactif, drag &amp; drop, événements
           récurrents, détection de conflits, responsive design et gestion d’état
           complexe.
@@ -69,7 +69,7 @@ const projects = [
         <p>
           Destiné aux <strong>collaborateurs d’une entreprise</strong>, ce
           formulaire accompagne la création d’un événement en adaptant les
-          informations demandées à chaque situation : réunion, formation,
+          informations demandées à chaque situation : réunion, formation,
           conférence, entretien ou événement interne. Il permet de{" "}
           <strong>
             centraliser les informations nécessaires tout en guidant
@@ -78,7 +78,7 @@ const projects = [
           .
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> formulaire
+          <strong>Compétences mises en pratique :</strong> formulaire
           multi-étapes, validation avec Zod, React Hook Form, champs
           conditionnels, sélection multiple, upload de fichiers, gestion des
           erreurs, sauvegarde de brouillon et responsive design.
@@ -103,7 +103,7 @@ const projects = [
           .
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> TanStack Table,
+          <strong>Compétences mises en pratique :</strong> TanStack Table,
           recherche, tri, pagination, filtres avancés, sélection de colonnes,
           URL Search Params, manipulation de données, appels API et adaptation
           mobile d’un tableau complexe.
@@ -129,7 +129,7 @@ const projects = [
           .
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> carte interactive,
+          <strong>Compétences mises en pratique :</strong> carte interactive,
           géolocalisation, géocodage d’adresses, API externes, GeoJSON,
           marqueurs et clusters, filtres géographiques, calcul de distances et
           affichage responsive.
@@ -155,7 +155,7 @@ const projects = [
           .
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> drag &amp; drop avec{" "}
+          <strong>Compétences mises en pratique :</strong> drag &amp; drop avec{" "}
           <code>dnd-kit</code>, gestion d’état complexe, réorganisation
           d’éléments, optimistic updates, filtres, formulaires, persistance des
           données, composants interactifs et responsive design.
@@ -182,7 +182,7 @@ const projects = [
           .
         </p>
         <p>
-          <strong>Compétences mises en pratique :</strong> React Flow (
+          <strong>Compétences mises en pratique :</strong> React Flow (
           <code>@xyflow/react</code>), drag &amp; drop, graphes et relations,
           nœuds personnalisés, zoom et déplacement du canvas, gestion de
           coordonnées, undo/redo, sérialisation JSON, sauvegarde et
@@ -212,7 +212,7 @@ export default function MyMultitudeProject() {
           <strong>un besoin concret et à un public spécifique</strong>.
         </p>
         <p>
-          Chaque projet est conçu comme une véritable expérience utilisateur :{" "}
+          Chaque projet est conçu comme une véritable expérience utilisateur :{" "}
           <strong>
             responsive lorsque le contexte s’y prête, accessible et attentive
             aux détails d’UX
@@ -232,7 +232,7 @@ export default function MyMultitudeProject() {
         </p>
         <p>
           C’est également un{" "}
-          <strong>terrain d’expérimentation et d’apprentissage</strong> : chaque
+          <strong>terrain d’expérimentation et d’apprentissage</strong> : chaque
           nouvelle interface est l’occasion de travailler des problématiques,
           des outils ou des concepts différents et de sortir de ce que je
           rencontre habituellement dans mon environnement professionnel.
@@ -243,11 +243,11 @@ export default function MyMultitudeProject() {
             ouverte aux suggestions de développeurs expérimentés, de recruteurs
             ou de professionnels du produit
           </strong>
-          : nouveaux types d’interfaces, problématiques intéressantes à résoudre
-          ou compétences particulièrement pertinentes à démontrer. L’objectif
-          est de continuer à enrichir le projet avec des cas d’usage variés qui
-          me permettent de progresser tout en donnant une vision plus complète
-          de mes compétences.
+           : nouveaux types d’interfaces, problématiques intéressantes à
+          résoudre ou compétences particulièrement pertinentes à démontrer.
+          L’objectif est de continuer à enrichir le projet avec des cas d’usage
+          variés qui me permettent de progresser tout en donnant une vision plus
+          complète de mes compétences.
         </p>
       </div>
 

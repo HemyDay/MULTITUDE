@@ -19,7 +19,7 @@ export default function MySkills() {
           </AccordionTrigger>
           <AccordionContent className="h-auto pt-4 pb-0 text-base">
             Je développe des interfaces qui doivent gérer de nombreuses règles
-            métier et plusieurs cas de figure : prise de rendez-vous,
+            métier et plusieurs cas de figure : prise de rendez-vous,
             calendriers, cartes, gestion des dates ou encore des adresses.
           </AccordionContent>
         </AccordionItem>
@@ -66,7 +66,7 @@ export default function MySkills() {
           </AccordionTrigger>
           <AccordionContent className="h-auto pt-4 pb-0 text-base">
             Je travaille sur des composants communs et des éléments de design
-            system afin de garder une interface cohérente et maintenable :
+            system afin de garder une interface cohérente et maintenable :
             modales, alertes, toasts, composants de formulaire ou éléments de
             navigation.
           </AccordionContent>

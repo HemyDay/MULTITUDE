@@ -18,7 +18,7 @@ export default function CurrentProfessionalExperience() {
         </p>
         <p>
           Au fil de l’évolution de ces produits, j’ai travaillé sur de
-          nombreuses parties de l’expérience : parcours de prise de rendez-vous,
+          nombreuses parties de l’expérience : parcours de prise de rendez-vous,
           calendrier, formulaires, carte, landing pages, composants du design
           system ou encore emails envoyés aux utilisateurs. J’ai notamment
           beaucoup travaillé sur le parcours de prise de rendez-vous, qui
