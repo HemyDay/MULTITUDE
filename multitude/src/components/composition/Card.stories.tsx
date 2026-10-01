@@ -26,7 +26,7 @@ const meta = {
     footer: { control: false },
     actions: { control: false },
   },
-} satisfies Meta<typeof Card>;
+} satisfies Meta<CardStoryArgs>;
 
 export default meta;
 
